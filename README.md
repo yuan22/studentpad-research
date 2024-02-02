@@ -19,10 +19,10 @@
 ###### 第二步：修改得到apk
 
 准备文件：
-[APK Editor Studio()](https://qwertycube.com/apk-editor-studio/download/)
-[创建快捷方式.app(这里的是洋葱学园改版，你需要将它包名改为你需要的)](https://whhhh.cloud/%E7%A0%B4%E8%A7%A3%E6%96%87%E4%BB%B6/%E5%88%9B%E5%BB%BA%E5%BF%AB%E6%8D%B7%E6%96%B9%E5%BC%8F.apk)
-[展讯特有的adb/下载模式驱动](https://androiddatahost.com/dsa6h)
-[adb工具下载及环境配置（一看就会）](https://zhuanlan.zhihu.com/p/653371171)
+* [APK Editor Studio()](https://qwertycube.com/apk-editor-studio/download/)
+* [创建快捷方式.app(这里的是洋葱学园改版，你需要将它包名改为你需要的)](https://whhhh.cloud/%E7%A0%B4%E8%A7%A3%E6%96%87%E4%BB%B6/%E5%88%9B%E5%BB%BA%E5%BF%AB%E6%8D%B7%E6%96%B9%E5%BC%8F.apk)
+* [展讯特有的adb/下载模式驱动](https://androiddatahost.com/dsa6h)
+* [adb工具下载及环境配置（一看就会）](https://zhuanlan.zhihu.com/p/653371171)
 
 然后，打开APK Editor Studio
 
