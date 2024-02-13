@@ -7,7 +7,7 @@
 ##### 思路
 
 * 制作可以打开隐藏的activity的apk（包名得是应用商店可下载的软件的包名，且将版本号更改为9999999999），然后拿钉钉、QQ、微信等聊天软件传上去，进行“更新”，后面通过这个途径达到开启adb的效果。
-
+  
 ##### 实践
 
 ###### 第一步：确认cpu的厂商
@@ -72,11 +72,48 @@ adb shell pm uninstall -k --user 0 com.iflytek.study.ota
 
 ## 自此，第三方应用安装的教程结束！完结撒花~
 
+## 2024.2.13更新：有一种基于修改system分区以达到自动开启adb的方法，我放在了["AI学习机高阶教程（Experimental | 未完工警告）"中的"修改system分区以达到连接电脑自动打开adb"部分](https://github.com/sdgasdgahj/studentpad-research/tree/main#修改system分区以达到连接电脑自动打开adb（T10，v1.07.7实践成功，2024.2.12）)
 ---
 
 # AI学习机高阶教程（Experimental | 未完工警告）
 
 Warning：下列操作较为危险，有几率导致平板变砖，三思而行（我们现在暂时还没有出刷机包，救不回来，官方刷机费一次要60大洋）
+
+## 修改system分区以达到连接电脑自动打开adb（T10，v1.07.7实践成功，2024.2.12）
+1.先去下载spd_dump程序和任意ud710设备的fdl1/2文件并安装驱动（这些东西详见[附录：一些资源及其使用方法/作用](https://github.com/sdgasdgahj/studentpad-research/tree/main?tab=readme-ov-file#%E9%99%84%E5%BD%95%E4%B8%80%E4%BA%9B%E8%B5%84%E6%BA%90%E5%8F%8A%E5%85%B6%E4%BD%BF%E7%94%A8%E6%96%B9%E6%B3%95%E4%BD%9C%E7%94%A8),fdl1/2我用的天翼一号2021的，可以在CVE-2022-38694_unlock_bootloader项目Release中找到，你下载压缩包就ok）
+2.你需要解压这个压缩包然后在解压目录下打开cmd，并输入：
+```
+spd_dump fdl <fdl1路径，将文件拖拽到命令行即可自动生成> 0x5500 fdl <fdl2路径，将文件拖拽到命令行即可自动生成> 0x9efffe00 exec partition_list partition.xml   ##得到当前机型分区表
+```
+打开你备份的分区表文件partition.xml，看到system这一栏，后面size里的数字就是你需要的（注：这个提取出的分区表的单位为MB，所以你写命令时要在数字后加M），然后你需要重进下载模式，输入：
+```
+spd_dump fdl <fdl1路径，将文件拖拽到命令行即可自动生成> 0x5500 fdl <fdl2路径，将文件拖拽到命令行即可自动生成> 0x9efffe00 exec read_part system 0 <分区大小，比如100M> system.img reset    ##提取system分区并保存到system.img，在操作完成后让设备自动重启
+```
+你得到system镜像后，需要再额外复制一份，将其命名为system_bak.img（防止设备成砖卡启动后无法救砖）
+
+自此，你就得到了两份system，你需要使用7zip打开system.img，将"system"目录下的"build.prop"文件复制到system.img所在的目录，并使用记事本/Vscode之类的编辑器打开build.prop，在文件末尾加上以下4行：
+```
+persist.service.adb.enable=1
+service.adb.tcp.port=5555
+persist.sys.usb.config=diag,adb,mtp
+ro.sys.usb.default.config=diag,adb,mtp
+```
+做完这一切，保存并退出
+
+然后下个WSL，然后在WSL终端切换到当前目录，执行以下命令
+```
+mkdir system
+sudo mount -o rw system.img system
+sudo rm system/system/build.prop
+sudo cp build.prop system/system/build.prop
+umount system.img
+```
+到这，你就改完system了，将其刷回设备上的system分区即可，你需要在cmd中运行如下命令以执行此操作：
+```
+spd_dump fdl <fdl1路径，将文件拖拽到命令行即可自动生成> 0x5500 fdl <fdl2路径，将文件拖拽到命令行即可自动生成> 0x9efffe00 exec write_part system system.img reset
+```
+大概过个半小时吧，平板就开机了，最后的效果是你一插入数据线，就会有“已连接到USB调试”的通知，这就说明你成功了
+Enjoy！
 
 ## 获取学习机的root（即刷入Magisk）
 
