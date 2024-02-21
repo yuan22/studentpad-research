@@ -172,7 +172,7 @@ sudo cp -r system-root/magisk
 system/system/etc/init
 sudo chmod 0700 -R system/system/etc/init/magisk 
 sudo chown -R 0 system/system/etc/init/magisk
-sudo chcon -R -t system_file system/system/etc/init/magisk
+sudo chcon -R -h u:object_r:system_file:s0 system/system/etc/init/magisk
 sudo umount system/
 ```
 
