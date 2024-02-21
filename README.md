@@ -184,7 +184,7 @@ spd_dump fdl <fdl1> 0x5500 fdl <fdl2> 0x9efffe00 exec write_part system system.i
 
 此方法理论上通用，祝各位折腾的愉快
 
-最后效果
+最后效果![114514](https://raw.githubusercontent.com/sdgasdgahj/studentpad-research/main/image_markdown/Screenshot_20240220-173025.png)
 
 
 ### 附录：一些资源及其使用方法/作用
