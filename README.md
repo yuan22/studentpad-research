@@ -75,6 +75,8 @@ adb shell pm uninstall -k --user 0 com.iflytek.study.ota
 
 ## 2024.2.13更新：有一种基于修改system分区以达到自动开启adb的方法，我放在了[&#34;AI学习机高阶教程（Experimental | 未完工警告）&#34;中的&#34;修改system分区以达到连接电脑自动打开adb&#34;部分](https://github.com/sdgasdgahj/studentpad-research/tree/main#修改system分区以达到连接电脑自动打开adb（T10，v1.07.7实践成功，2024.2.12）)
 
+## 2024.2.20更新：新研发出一种基于修改system分区以达到root的方法（已在展讯机型测试通过）
+
 ---
 
 # AI学习机高阶教程（Experimental | 未完工警告）
@@ -173,7 +175,42 @@ system/system/etc/init
 sudo chmod 0700 -R system/system/etc/init/magisk 
 sudo chown -R 0 system/system/etc/init/magisk
 sudo chcon -R -h u:object_r:system_file:s0 system/system/etc/init/magisk
-sudo umount system/
+```
+
+
+
+修改bootanim.rc（路径为system/system/etc/init/bootanim.rc），在最后面加上这么几行：
+
+```
+on post-fs-data
+    start logd
+    exec u:r:su:s0 root root -- /system/etc/init/magisk/magiskpolicy --live --magisk
+    exec u:r:magisk:s0 root root -- /system/etc/init/magisk/magiskpolicy --live --magisk
+    exec u:r:update_engine:s0 root root -- /system/etc/init/magisk/magiskpolicy --live --magisk
+    exec u:r:su:s0 root root -- /system/etc/init/magisk/magisk64 --auto-selinux --setup-sbin /system/etc/init/magisk /sbin
+    exec u:r:su:s0 root root -- /sbin/magisk --auto-selinux --post-fs-data
+
+on nonencrypted
+    exec u:r:su:s0 root root -- /sbin/magisk --auto-selinux --service
+
+on property:vold.decrypt=trigger_restart_framework
+    exec u:r:su:s0 root root -- /sbin/magisk --auto-selinux --service
+
+on property:sys.boot_completed=1
+    mkdir /data/adb/magisk 755
+    exec u:r:su:s0 root root -- /sbin/magisk --auto-selinux --boot-complete
+   
+on property:init.svc.zygote=restarting
+    exec u:r:su:s0 root root -- /sbin/magisk --auto-selinux --zygote-restart
+   
+on property:init.svc.zygote=stopped
+    exec u:r:su:s0 root root -- /sbin/magisk --auto-selinux --zygote-restart
+```
+
+修改完记得取消挂载system.img：
+
+```
+sudo umount system.img
 ```
 
 刷入system和vendor：
@@ -185,7 +222,6 @@ spd_dump fdl <fdl1> 0x5500 fdl <fdl2> 0x9efffe00 exec write_part system system.i
 此方法理论上通用，祝各位折腾的愉快
 
 最后效果![114514](https://raw.githubusercontent.com/sdgasdgahj/studentpad-research/main/image_markdown/Screenshot_20240220-173025.png)
-
 
 ### 附录：一些资源及其使用方法/作用
 
