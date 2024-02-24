@@ -148,13 +148,13 @@ Enjoy！
 spd_dump fdl <fdl1> 0x5500 fdl <fdl2> 0x9efffe00 exec read_part system 0 <size> system.img read_part vendor 0 <size> vendor.img
 ```
 
-修改vendor
+修改vendor（可选步骤）
 
 ```
 mkdir vendor
 sudo mount -o rw vendor.img vendor
 sudo cp vendor/etc/selinux/precompiled_sepolicy sepol.in
-magiskinit sepol.in sepol.out
+magiskinit sepol.in sepol.out #这一步需要一个已经root的手机
 sudo rm vendor/etc/selinux/precompiled_sepolicy
 sudo cp sepol.out vendor/etc/selinux/precompiled_sepolicy
 sudo umount vendor
