@@ -1,7 +1,8 @@
 # 科大讯飞AI学习机破解安装第三方应用教程
-
 * 本项目欢迎各位读者开issue，**本项目秉承公益的原则，故禁止倒卖！被骗的欢迎开issue来提供骗子个人信息！**
 * 如果看不了图片，你可以去下载WattToolkit，里面有“Github加速”功能；或者你也可以把这个项目克隆到本地，然后下个VScode，Vscode中下一个OfficeViewer插件就能看了
+* 材料：电脑*1，数据线一根，乐于提问、勤于思考/会用搜索引擎的人x1
+
 ### 第三方应用安装（又称：升级软件法）
 
 ##### 思路
@@ -83,7 +84,8 @@ adb shell pm uninstall -k --user 0 com.iflytek.study.ota
 
 # AI学习机高阶教程（Experimental | 未完工警告）
 
-Warning：下列操作较为危险，有几率导致平板变砖，三思而行（我们现在暂时还没有出刷机包，救不回来，官方刷机费一次要60大洋）
+* Warning：下列操作较为危险，有几率导致平板变砖，三思而行，所以备份尤为重要，我建议是但凡是要进行修改的分区都应当进行备份
+* 下列操作都已经超出了《》
 
 ## 修改system分区以达到连接电脑自动打开adb（T10，v1.07.7实践成功，2024.2.12）
 
@@ -207,6 +209,10 @@ on property:init.svc.zygote=stopped
     exec u:r:su:s0 root root -- /sbin/magisk --auto-selinux --zygote-restart
 ```
 
+### （可选但非常推荐的步骤）：卸载系统更新
+```
+sudo rm -r system/system/app/IflyOTA
+```
 ### 取消挂载system.img：
 
 ```
@@ -222,6 +228,7 @@ spd_dump fdl <fdl1> 0x5500 fdl <fdl2> 0x9efffe00 exec write_part system system.i
 此方法理论上通用，祝各位折腾的愉快
 
 ### 最后效果![114514](https://raw.githubusercontent.com/sdgasdgahj/studentpad-research/main/image_markdown/Screenshot_20240220-173025.png)
+
 
 ## 附录：一些资源及其使用方法/作用
 
