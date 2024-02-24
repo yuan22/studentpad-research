@@ -134,7 +134,7 @@ Enjoy！
 
 为何要把root部分拿出来讲呢？因为这学习机的boot无法patch（原因是没有ramdisk）
 
-~~有两种可能的方法：system分区植入magisk法和patch rec镜像法~~system分区植入法目前已成功实践，rec法因为avb的原因无法正常启动，所以下文只讲system分区植入magisk法
+system分区植入法目前已成功实践，rec法因为avb的原因无法正常启动，所以下文只讲system分区植入magisk法
 
 * 大概思路：将magisk安装到安卓system分区，可以参考[某酷安大佬写的方案（Magisk system root部分）](https://github.com/TomKing062/CVE-2022-38694_unlock_bootloader/wiki/Magisk)
 
@@ -142,27 +142,13 @@ Enjoy！
 
 下面是命令实现，Linux环境是WSL2（Ubuntu）
 
-提取分区**（重要：提取完请手动将vendor和system镜像各复制一份，防止出意外状况后无法恢复至原来状态）**
+提取分区（重要：提取完请手动将system镜像复制一份，防止出意外状况后无法恢复至原来状态）
 
 ```
 spd_dump fdl <fdl1> 0x5500 fdl <fdl2> 0x9efffe00 exec read_part system 0 <size> system.img read_part vendor 0 <size> vendor.img
 ```
 
-修改vendor（可选步骤）
-
-```
-mkdir vendor
-sudo mount -o rw vendor.img vendor
-sudo cp vendor/etc/selinux/precompiled_sepolicy sepol.in
-magiskinit sepol.in sepol.out #这一步需要一个已经root的手机
-sudo rm vendor/etc/selinux/precompiled_sepolicy
-sudo cp sepol.out vendor/etc/selinux/precompiled_sepolicy
-sudo umount vendor
-
-
-```
-
-修改system:下载[system-root.zip](https://transfer.sh/get/AcFEYGC7dH/system-root.zip)并解压，执行以下命令
+修改system
 
 ```
 mkdir system
@@ -176,8 +162,6 @@ sudo chmod 0700 -R system/system/etc/init/magisk
 sudo chown -R 0 system/system/etc/init/magisk
 sudo chcon -R -h u:object_r:system_file:s0 system/system/etc/init/magisk
 ```
-
-
 
 修改bootanim.rc（路径为system/system/etc/init/bootanim.rc），在最后面加上这么几行：
 
@@ -213,10 +197,10 @@ on property:init.svc.zygote=stopped
 sudo umount system.img
 ```
 
-刷入system和vendor：
+刷入system：
 
 ```
-spd_dump fdl <fdl1> 0x5500 fdl <fdl2> 0x9efffe00 exec write_part system system.img write_part vendor.img reset
+spd_dump fdl <fdl1> 0x5500 fdl <fdl2> 0x9efffe00 exec write_part system system.img reset
 ```
 
 此方法理论上通用，祝各位折腾的愉快
