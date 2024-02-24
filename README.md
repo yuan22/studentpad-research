@@ -173,8 +173,7 @@ sudo mount -o rw system.img system
 sudo cp system-root/bin/magisk  system/system/bin/magisk
 sudo cp system-root/bin/magiskpolicy system/system/bin/magiskpolicy
 sudo cp system-root/init/magisk.rc system/system/etc/init/magisk.rc
-sudo cp -r system-root/magisk 
-system/system/etc/init
+sudo cp -r system-root/magisk system/system/etc/init
 sudo chmod 0700 -R system/system/etc/init/magisk 
 sudo chown -R 0 system/system/etc/init/magisk
 sudo chcon -R -h u:object_r:system_file:s0 system/system/etc/init/magisk
