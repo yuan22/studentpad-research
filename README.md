@@ -167,7 +167,7 @@ system分区植入法目前已成功实践，rec法因为avb的原因无法正�
 spd_dump fdl <fdl1> 0x5500 fdl <fdl2> 0x9efffe00 exec read_part system 0 <size> system.img read_part vendor 0 <size> vendor.img
 ```
 
-### 修改system
+### 修改system(system-root文件下的内容在system-root.zip)
 
 ```
 mkdir system
