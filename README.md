@@ -85,8 +85,10 @@ adb shell pm uninstall -k --user 0 com.iflytek.study.ota
 # AI学习机高阶教程（Experimental | 未完工警告）
 
 * Warning：下列操作较为危险，有几率导致平板变砖，三思而行，所以备份尤为重要，我建议是但凡是要进行修改的分区都应当进行备份
-* 下列操作都已经超出了《》
-
+* 下列操作都已经超出了《科大讯飞AI学习机AI学习软件服务用户协议》：
+>用户若对学习机进行刷机行为，包括但不限于获取root权限，刷入第三方ROM等，则本机将会从科大讯飞AI学习机官方技术支持和软件保修服务中被移除
+>
+所以，下面的内容请三思而行
 ## 修改system分区以达到连接电脑自动打开adb（T10，v1.07.7实践成功，2024.2.12）
 
 1.先去下载spd_dump程序和任意ud710设备的fdl1/2文件并安装驱动（这些东西详见[附录：一些资源及其使用方法/作用](https://github.com/sdgasdgahj/studentpad-research/tree/main?tab=readme-ov-file#%E9%99%84%E5%BD%95%E4%B8%80%E4%BA%9B%E8%B5%84%E6%BA%90%E5%8F%8A%E5%85%B6%E4%BD%BF%E7%94%A8%E6%96%B9%E6%B3%95%E4%BD%9C%E7%94%A8),fdl1/2我用的天翼一号2021的，可以在CVE-2022-38694_unlock_bootloader项目Release中找到，你下载压缩包就ok）
