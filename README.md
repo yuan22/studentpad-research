@@ -110,7 +110,6 @@ spd_dump fdl <fdl1路径，将文件拖拽到命令行即可自动生成> 0x5500
 
 ```
 persist.service.adb.enable=1
-service.adb.tcp.port=5555
 persist.sys.usb.config=diag,adb,mtp
 ro.sys.usb.default.config=diag,adb,mtp
 ```
