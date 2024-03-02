@@ -212,7 +212,8 @@ on property:init.svc.zygote=stopped
 
 ### （可选但非常推荐的步骤）：卸载系统更新
 ```
-sudo rm -rf system/system/app/IflyOTA
+cd system/system/app/
+sudo rm -rf IFlyOTA
 ```
 ### 取消挂载system.img：
 
