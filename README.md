@@ -80,39 +80,19 @@ adb shell pm uninstall -k --user 0 com.iflytek.study.ota
 
 ## 2024.2.24更新：如果你是新版本的展讯机型，你可以直接去root然后配合上"修改system分区……adb部分"强开adb，上方的教程留给未更新的老机型
 
+## 2024.3.2更新：将把教程中关于开启adb部分与root系统部分进行合并
+
 ---
 
 # AI学习机高阶教程（Experimental | 未完工警告）
 
-* Warning：下列操作较为危险，有几率导致平板变砖，三思而行，所以备份尤为重要，我建议是但凡是要进行修改的分区都应当进行备份
+* Warning：下列操作要想生效，都需要进行**解锁bl(即Bootloader锁)**，以及**刷入分区**的危险操作，三思而行，所以备份尤为重要，我建议是但凡是要进行修改的分区都应当进行备份，以及在root完成后，请使用爱玩机工具箱"导航——刷机工具箱——镜像分区管理"导出系统除userdata分区以外的所有分区的备份
 * 下列操作都已经超出了《科大讯飞AI学习机AI学习软件服务用户协议》：
 >用户若对学习机进行刷机行为，包括但不限于获取root权限，刷入第三方ROM等，则本机将会从科大讯飞AI学习机官方技术支持和软件保修服务中被移除
 >
 所以，下面的内容请三思而行
-## 修改system分区以达到连接电脑自动打开adb（T10，v1.07.7实践成功，2024.2.12）
 
-1.先去下载spd_dump程序和任意ud710设备的fdl1/2文件并安装驱动（这些东西详见[附录：一些资源及其使用方法/作用](https://github.com/sdgasdgahj/studentpad-research/tree/main?tab=readme-ov-file#%E9%99%84%E5%BD%95%E4%B8%80%E4%BA%9B%E8%B5%84%E6%BA%90%E5%8F%8A%E5%85%B6%E4%BD%BF%E7%94%A8%E6%96%B9%E6%B3%95%E4%BD%9C%E7%94%A8),fdl1/2我用的天翼一号2021的，可以在CVE-2022-38694_unlock_bootloader项目Release中找到，你下载压缩包就ok）
-2.你需要解压这个压缩包然后在解压目录下打开cmd，并输入：
 
-```
-spd_dump fdl <fdl1路径，将文件拖拽到命令行即可自动生成> 0x5500 fdl <fdl2路径，将文件拖拽到命令行即可自动生成> 0x9efffe00 exec partition_list partition.xml   ##得到当前机型分区表
-```
-
-打开你备份的分区表文件partition.xml，看到system这一栏，后面size里的数字就是你需要的（注：这个提取出的分区表的单位为MB，所以你写命令时要在数字后加M），然后你需要重进下载模式，输入：
-
-```
-spd_dump fdl <fdl1路径，将文件拖拽到命令行即可自动生成> 0x5500 fdl <fdl2路径，将文件拖拽到命令行即可自动生成> 0x9efffe00 exec read_part system 0 <分区大小，比如100M> system.img reset    ##提取system分区并保存到system.img，在操作完成后让设备自动重启
-```
-
-你得到system镜像后，需要再额外复制一份，将其命名为system_bak.img（防止设备成砖卡启动后无法救砖）
-
-自此，你就得到了两份system，你需要使用7zip打开system.img，将"system"目录下的"build.prop"文件复制到system.img所在的目录，并使用记事本/Vscode之类的编辑器打开build.prop，在文件末尾加上以下4行：
-
-```
-persist.service.adb.enable=1
-persist.sys.usb.config=diag,adb,mtp
-ro.sys.usb.default.config=diag,adb,mtp
-```
 
 做完这一切，保存并退出
 
@@ -182,8 +162,12 @@ sudo chown -R 0 system/system/etc/init/magisk
 sudo chcon -R -h u:object_r:system_file:s0 system/system/etc/init/magisk
 ```
 
-### 修改bootanim.rc（路径为system/system/etc/init/bootanim.rc），在最后面加上这么几行：
-
+### 修改bootanim.rc（必做）：
+```
+sudo nano system/system/etc/init/bootanim.rc
+```
+用键盘将光标移动在最底下并按几下回车，然后向其中复制以下内容
+Tips:把鼠标放到代码框右上角，你会发现有一个复制的按钮，按一下就好，然后在命令行中使用右键进行粘贴即可
 ```
 on post-fs-data
     start logd
@@ -209,12 +193,24 @@ on property:init.svc.zygote=restarting
 on property:init.svc.zygote=stopped
     exec u:r:su:s0 root root -- /sbin/magisk --auto-selinux --zygote-restart
 ```
-
-### （可选但非常推荐的步骤）：卸载系统更新
+在修改完后，你需要用Ctrl+X+Y的组合键来保存你的修改，然后就完成了
+### （可选但非常推荐的步骤）：1.卸载系统更新
 ```
 cd system/system/app/
 sudo rm -rf IFlyOTA
 ```
+### （可选但非常推荐的步骤）：2.开启adb
+Tips：如果你前一步"卸载系统更新"也进行了，那你需要先执行三次`cd ..`
+```
+nano system\system\build.prop
+```
+用键盘将光标移动在最底下并按几下回车，然后加入以下内容（Tips:把鼠标放到代码框右上角，你会发现有一个复制的按钮，按一下就好，然后在命令行中使用右键进行粘贴即可）：
+```
+persist.service.adb.enable=1
+persist.sys.usb.config=diag,adb,mtp
+ro.sys.usb.default.config=diag,adb,mtp
+```
+在修改完后，你需要用Ctrl+X+Y的组合键来保存你的修改，然后就完成了
 ### 取消挂载system.img：
 
 ```
@@ -226,9 +222,15 @@ sudo umount system.img
 ```
 spd_dump fdl <fdl1> 0x5500 fdl <fdl2> 0x9efffe00 exec write_part system system.img reset
 ```
-
-此方法理论上通用，祝各位折腾的愉快
-
+### 开机后步骤
+#### 安装爱玩机工具箱
+电脑在解bootloader那一步用的文件夹里打开cmd
+输入
+```
+adb devices
+adb install <你爱玩机的apk文件>
+```
+工作模式选择Root，给它授权，然后
 ### 最后效果![114514](https://raw.githubusercontent.com/sdgasdgahj/studentpad-research/main/image_markdown/Screenshot_20240220-173025.png)
 
 
@@ -243,20 +245,6 @@ Link：[Download SPD Driver R4.20.4201 (UniSoc Driver) (androiddatahost.com)](ht
 使用方法：下载安装即可
 
 注：macOS、Linux不需要安装这个东西
-
-#### Research Download
-
-Link：[Research Tool - SPD Flash Tool](https://spdflashtool.com/category/research-tool)
-
-作用：读取分区、刷入分区（很危险！）
-
-我推荐用R25.20.3901这个版本，因为它比较稳定
-
-用法：[使用ResearchDownload为展讯机型提取镜像 - 哔哩哔哩 (bilibili.com)](https://www.bilibili.com/read/cv24981169/?jump_opus=1)
-
-    总之就是你需要pac刷机包才能用
-
-弊端：你必须得先做个包或者先拿同SoC（比如ud710）的fdl才行，还有每次回读操作都太麻烦了，但如果不遵守就有很大可能性会出问题（比如刷砖。售后刷机一次60）
 
 #### spd_dump及CVE-2022-38694_unlock_bootloader项目
 
