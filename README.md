@@ -83,6 +83,8 @@ adb shell pm uninstall -k --user 0 com.iflytek.study.ota
 
 ## 2024.3.2更新：将把教程中关于开启adb部分与root系统部分进行合并
 
+## 2024.3.8更新：高阶教程中关于开启adb部分与root系统部分合并完成
+
 ---
 
 # AI学习机高阶教程（Experimental | 未完工警告）
@@ -92,31 +94,6 @@ adb shell pm uninstall -k --user 0 com.iflytek.study.ota
 >用户若对学习机进行刷机行为，包括但不限于获取root权限，刷入第三方ROM等，则本机将会从科大讯飞AI学习机官方技术支持和软件保修服务中被移除
 >
 所以，下面的内容请三思而行
-
-
-
-做完这一切，保存并退出
-
-然后下个WSL，然后在WSL终端切换到当前目录，执行以下命令
-
-```
-mkdir system
-sudo mount -o rw system.img system
-sudo rm system/system/build.prop
-sudo cp build.prop system/system/build.prop
-umount system.img
-```
-
-到这，你就改完system了，将其刷回设备上的system分区即可，你需要在cmd中运行如下命令以执行此操作：
-
-```
-spd_dump fdl <fdl1路径，将文件拖拽到命令行即可自动生成> 0x5500 fdl <fdl2路径，将文件拖拽到命令行即可自动生成> 0x9efffe00 exec write_part system system.img reset
-```
-
-大概过个半小时吧，平板就开机了，最后的效果是你一插入数据线，就会有“已连接到USB调试”的通知，这就说明你成功了
-
-
-Enjoy！
 
 ## 获取学习机的root（即刷入Magisk）
 
@@ -130,7 +107,7 @@ system分区植入法目前已成功实践，rec法因为avb的原因无法正�
 
 ### 解锁bootloader（最重要的一集）
 
-* 文件：https://pan.baidu.com/s/1CS0MZdqh0nN3Xb8FstRhkA?pwd=hhef&_at_=1708756671115#list/path=%2F
+* 文件：http://ys-j.ysepan.com/618842530/218423673/o5G457F396HM6KU6VJSWd0/adb-fastboot-win-unlock.zip?lx=xz
 * 使用物理按键进入REC（提示：与Jingpad A1进入rec的方式一致），然后使用电源键+音量加的按键组合调出菜单，用音量上选择第二项，然后使用电源键进入fastboot模式，在下载下来的文件的解压目录的地址栏输入cmd，在打开的窗口中输入 `fastboot devices `得到一串字母加数字，这就是你机器的序列号，在另一台安卓设备上安装“文件”中的apk，输入你得到的序列号，完事会生成一个叫signature.bin的文件，你需要将这个文件拷到当前目录(即：你cmd在的目录)
 * 使用 `fastboot flashing unlock_bootloader signature.bin`的命令，进行设备解锁，然后按下音量下键，确认解锁即可，然后bootloader会进行格机
 * 恭喜你，成功解锁bootloader
@@ -161,6 +138,11 @@ sudo cp -r system-root/magisk system/system/etc/init
 sudo chmod 0700 -R system/system/etc/init/magisk 
 sudo chown -R 0 system/system/etc/init/magisk
 sudo chcon -R -h u:object_r:system_file:s0 system/system/etc/init/magisk
+cd system/data
+mkdir adb
+cd ..
+cd ..
+sudo cp -r data-magisk system/data/adb/
 ```
 
 ### 修改bootanim.rc（必做）：
@@ -231,8 +213,14 @@ spd_dump fdl <fdl1> 0x5500 fdl <fdl2> 0x9efffe00 exec write_part system system.i
 adb devices
 adb install <你爱玩机的apk文件>
 ```
-工作模式选择Root，给它授权，然后
-### 最后效果![114514](https://raw.githubusercontent.com/sdgasdgahj/studentpad-research/main/image_markdown/Screenshot_20240220-173025.png)
+工作模式选择Root，给它授权，然后你就可以使用这里面的安装器了（喜
+#### 使用爱玩机工具箱备份全分区（救砖可以使用备份的分区
+步骤放图片里了，自己看吧
+![1](image/README/1.png)
+![2](image/README/2.png)
+![3](image/README/3.png)
+
+
 
 
 ## 附录：一些资源及其使用方法/作用
@@ -240,6 +228,7 @@ adb install <你爱玩机的apk文件>
 #### SPD_Driver
 
 Link：[Download SPD Driver R4.20.4201 (UniSoc Driver) (androiddatahost.com)](https://androiddatahost.com/dsa6h)
+国内网盘分流：[到“紫光通用”目录下下载“紫光驱动”即可](http://qutick102.ysepan.com/)
 
 作用：ADB驱动+展讯下载模式的驱动
 
@@ -250,13 +239,27 @@ Link：[Download SPD Driver R4.20.4201 (UniSoc Driver) (androiddatahost.com)](ht
 #### spd_dump及CVE-2022-38694_unlock_bootloader项目
 
 Link：[GitHub - TomKing062/CVE-2022-38694_unlock_bootloader](https://github.com/TomKing062/CVE-2022-38694_unlock_bootloader)
+Spd_Dump工具下载：[到“紫光通用”目录下下载日期最新的spd_dump_dev版本](http://qutick102.ysepan.com/)
 
-作用：提供了第二种进行读写设备分区操作的工具，但它是命令行的；提供了一种强解bootloader的方法（SoC漏洞），研究出来可以搞升级软件法不支持的机型安装软件；可以用这个读取平板的分区表（数据单位为MB）
+作用：提供了第二种进行读写设备分区操作的工具，但它是命令行的；提供了一种强解bootloader的方法（SoC漏洞）；可以用这个读取平板的分区表（数据单位为MB）
 
-用法（对于我们学习机而言）
+用法
 
+固定部分(这部分复制粘贴就行)
 ```
-spd_dump fdl fdl1.bin 0x5500 fdl fdl2.bin 0x9efffe00 exec <read_part/write_part/erase_part> <partition_name（分区名称）>  0 <size（分区大小，是个单位都行，比如M（MB）、K（KB），等等）>
+spd_dump fdl fdl1.bin 0x5500 fdl fdl2.bin 0x9efffe00 exec
 ```
-
-注：write_part\erase_part 不需要写 0 `<size>` 这一部分
+命令部分(需要在exec后面空格后输入)：
+读分区：`read_part <分区名> 0 <分区大小，或直接填0xFFFFFFFFFFF> <保存的文件名称>`
+写分区：`write_part <分区名> <要刷入的镜像>`
+擦除分区：`erase_part <分区名>`
+执行完操作后重启：`reset`(一般加在命令的末尾即可)
+技巧：命令的拼接——————只需要将好几个完整命令exec部分后面的东西放在一起（注：如果有reset应该将reset放在命令末尾），下面是一个例子：
+问：我有三条命令（见代码块）,要把他们整合成一条，该怎么做？
+```
+spd_dump fdl fdl1.bin 0x5500 fdl fdl2.bin 0x9efffe00 exec read_part system 0 10G system.img reset
+spd_dump fdl fdl1.bin 0x5500 fdl fdl2.bin 0x9efffe00 exec erase_part vbmeta_bak reset
+spd_dump fdl fdl1.bin 0x5500 fdl fdl2.bin 0x9efffe00 exec write_part vbmeta_bak vbmeta.img reset
+```
+答：
+spd_dump fdl fdl1.bin 0x5500 fdl fdl2.bin 0x9efffe00 exec `read_part system 0 10G system.img` `erase_part vbmeta_bak` `write_part vbmeta_bak vbmeta.img reset`
