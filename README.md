@@ -113,7 +113,7 @@ system分区植入法目前已成功实践，rec法因为avb的原因无法正�
 
 * 文件：[到“紫光解BL锁”目录下下载adb-fastboot-win-unlock.zip文件](http://qutick102.ysepan.com/)
 * 文件2：[下载&#34;用来得到解锁密钥的软件.apk&#34;](https://kdxf.work/)
-* 使用物理按键进入REC（提示：与Jingpad A1进入rec的方式一致），然后使用电源键+音量加的按键组合调出菜单，用音量上选择第二项，然后使用电源键进入fastboot模式，在下载下来的文件的解压目录的地址栏输入cmd，在打开的窗口中输入 `fastboot devices `得到一串字母加数字，这就是你机器的序列号，在另一台安卓设备上安装“文件”中的[apk;](https://www.alipan.com/s/SLgfA1dFGrt)，输入你得到的序列号，完事会生成一个叫signature.bin的文件，你需要将这个文件拷到当前目录(即：你cmd在的目录)
+* 使用物理按键进入REC（提示：与Jingpad A1进入rec的方式一致），然后使用电源键+音量加的按键组合调出菜单，用音量上选择第二项，然后使用电源键进入fastboot模式，在下载下来的文件的解压目录的地址栏输入cmd，在打开的窗口中输入 `fastboot devices `得到一串字母加数字，这就是你机器的序列号，在另一台安卓设备上安装“文件”中的[apk](https://www.alipan.com/s/SLgfA1dFGrt)，输入你得到的序列号，完事会生成一个叫signature.bin的文件，你需要将这个文件拷到当前目录(即：你cmd在的目录)
 * 使用 `fastboot flashing unlock_bootloader signature.bin`的命令，进行设备解锁，然后按下音量下键，确认解锁即可，然后bootloader会进行格机
 * 恭喜你，成功解锁bootloader
 
