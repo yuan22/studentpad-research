@@ -132,7 +132,7 @@ spd_dump fdl <fdl1> 0x5500 fdl <fdl2> 0x9efffe00 exec partition_list partition.x
 ```
 
 ### 提取分区（重要：提取完请手动将system镜像复制一份，防止出意外状况后无法恢复至原来状态）
-其中<size>填入上一步执行后cmd反馈中system后的数字+M，如114514M
+其中size部分填入上一步执行后cmd反馈中system后的数字+M，如114514M
 
 ```
 spd_dump fdl <fdl1> 0x5500 fdl <fdl2> 0x9efffe00 exec read_part system 0 <size> system.img read_part vendor 0 <size> vendor.img
