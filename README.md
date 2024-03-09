@@ -103,6 +103,8 @@ adb shell pm uninstall -k --user 0 com.iflytek.study.ota
 
 system分区植入法目前已成功实践，rec法因为avb的原因无法正常启动，所以下文只讲system分区植入magisk法
 
+适配机型:x2pro,t10等ud710设备，c10,c10pro因未知原因提取失败
+
 * 大概思路：将magisk安装到安卓system分区，可以参考[某酷安大佬写的方案（Magisk system root部分）](https://github.com/TomKing062/CVE-2022-38694_unlock_bootloader/wiki/Magisk)
 
 总结下来就四步：①解锁板子的bootloader（这一步已经做到能纯Windows环境下进行了），②提取system分区并进行修改，③将修改好的文件放回分区并刷回板子中以root
@@ -111,7 +113,7 @@ system分区植入法目前已成功实践，rec法因为avb的原因无法正�
 
 * 文件：[到“紫光解BL锁”目录下下载adb-fastboot-win-unlock.zip文件](http://qutick102.ysepan.com/)
 * 文件2：[下载&#34;用来得到解锁密钥的软件.apk&#34;](https://kdxf.work/)
-* 使用物理按键进入REC（提示：与Jingpad A1进入rec的方式一致），然后使用电源键+音量加的按键组合调出菜单，用音量上选择第二项，然后使用电源键进入fastboot模式，在下载下来的文件的解压目录的地址栏输入cmd，在打开的窗口中输入 `fastboot devices `得到一串字母加数字，这就是你机器的序列号，在另一台安卓设备上安装“文件”中的apk，输入你得到的序列号，完事会生成一个叫signature.bin的文件，你需要将这个文件拷到当前目录(即：你cmd在的目录)
+* 使用物理按键进入REC（提示：与Jingpad A1进入rec的方式一致），然后使用电源键+音量加的按键组合调出菜单，用音量上选择第二项，然后使用电源键进入fastboot模式，在下载下来的文件的解压目录的地址栏输入cmd，在打开的窗口中输入 `fastboot devices `得到一串字母加数字，这就是你机器的序列号，在另一台安卓设备上安装“文件”中的[apk;](https://www.alipan.com/s/SLgfA1dFGrt)，输入你得到的序列号，完事会生成一个叫signature.bin的文件，你需要将这个文件拷到当前目录(即：你cmd在的目录)
 * 使用 `fastboot flashing unlock_bootloader signature.bin`的命令，进行设备解锁，然后按下音量下键，确认解锁即可，然后bootloader会进行格机
 * 恭喜你，成功解锁bootloader
 
@@ -123,7 +125,14 @@ system分区植入法目前已成功实践，rec法因为avb的原因无法正�
 
 ![1708767509011](image/README/1708767509011.png)
 
+### 获取分区大小(有关下一步提取)
+
+```
+spd_dump fdl <fdl1> 0x5500 fdl <fdl2> 0x9efffe00 exec partition_list partition.xml
+```
+
 ### 提取分区（重要：提取完请手动将system镜像复制一份，防止出意外状况后无法恢复至原来状态）
+其中<size>填入上一步执行后cmd反馈中system后的数字+M，如114514M
 
 ```
 spd_dump fdl <fdl1> 0x5500 fdl <fdl2> 0x9efffe00 exec read_part system 0 <size> system.img read_part vendor 0 <size> vendor.img
