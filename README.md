@@ -215,7 +215,7 @@ sudo rm -rf IFlyOTA
 Tips：如果你前一步"卸载系统更新"也进行了，那你需要先执行三次 `cd ..`
 
 ```
-nano system\system\build.prop
+nano system/system/build.prop
 ```
 
 用键盘将光标移动在最底下并按几下回车，然后加入以下内容（Tips:把鼠标放到代码框右上角，你会发现有一个复制的按钮，按一下就好，然后在命令行中使用右键进行粘贴即可）：
