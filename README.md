@@ -163,7 +163,7 @@ cd system/data
 mkdir adb
 cd ..
 cd ..
-sudo cp -r data-magisk system/data/adb/
+sudo cp -r system-root/data-magisk system/data/adb/
 ```
 
 ### 修改bootanim.rc（必做）：
