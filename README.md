@@ -78,7 +78,7 @@ adb shell pm uninstall -k --user 0 com.iflytek.study.ota
 
 ## 2024.2.13更新：有一种基于修改system分区以达到自动开启adb的方法，我放在了[&#34;AI学习机高阶教程（Experimental | 未完工警告）&#34;中的&#34;修改system分区以达到连接电脑自动打开adb&#34;部分](https://github.com/sdgasdgahj/studentpad-research/tree/main#修改system分区以达到连接电脑自动打开adb（T10，v1.07.7实践成功，2024.2.12）)
 
-## 2024.2.20更新：新研发出一种基于修改system分区以达到root的方法（已在展讯机型测试通过）
+## 2024.2.20更新：新研发出一种基于修改system分区以达到root的方法（已在展讯部分机型测试通过）
 
 ## 2024.2.24更新：如果你是新版本的展讯机型，你可以直接去root然后配合上"修改system分区……adb部分"强开adb，上方的教程留给未更新的老机型
 
@@ -103,7 +103,7 @@ adb shell pm uninstall -k --user 0 com.iflytek.study.ota
 
 system分区植入法目前已成功实践，rec法因为avb的原因无法正常启动，所以下文只讲system分区植入magisk法
 
-适配机型:x2pro,t10等ud710设备，c10,c10pro因未知原因提取失败
+适配机型:x2pro,t10等ud710设备，c系列机型（c6,c10,c10pro）因未知原因提取失败，
 
 * 大概思路：将magisk安装到安卓system分区，可以参考[某酷安大佬写的方案（Magisk system root部分）](https://github.com/TomKing062/CVE-2022-38694_unlock_bootloader/wiki/Magisk)
 
@@ -141,6 +141,7 @@ spd_dump fdl <fdl1> 0x5500 fdl <fdl2> 0x9efffe00 exec partition_list partition.x
 ```
 
 ### 提取分区（重要：提取完请手动将system镜像复制一份，防止出意外状况后无法恢复至原来状态）
+
 其中size部分填入上一步执行后cmd反馈中system后的数字+M，如114514M
 
 ```
@@ -290,10 +291,21 @@ spd_dump fdl fdl1.bin 0x5500 fdl fdl2.bin 0x9efffe00 exec
 ```
 
 命令部分(需要在exec后面空格后输入)：
+
+---
+
+读取分区表：`partition_list partition.xml`
+
 读分区：`read_part <分区名> 0 <分区大小，或直接填0xFFFFFFFFFFF> <保存的文件名称>`
+
 写分区：`write_part <分区名> <要刷入的镜像>`
+
 擦除分区：`erase_part <分区名>`
+
 执行完操作后重启：`reset`(一般加在命令的末尾即可)
+
+---
+
 技巧：命令的拼接——————只需要将好几个完整命令exec部分后面的东西放在一起（注：如果有reset应该将reset放在命令末尾），下面是一个例子：
 问：我有三条命令（见代码块）,要把他们整合成一条，该怎么做？
 
@@ -304,4 +316,22 @@ spd_dump fdl fdl1.bin 0x5500 fdl fdl2.bin 0x9efffe00 exec write_part vbmeta_bak 
 ```
 
 答：
+
+---
+
 spd_dump fdl fdl1.bin 0x5500 fdl fdl2.bin 0x9efffe00 exec `read_part system 0 10G system.img` `erase_part vbmeta_bak` `write_part vbmeta_bak vbmeta.img reset`
+
+---
+
+#### 学习机配置及目前玩机进度一览表
+
+| 学习机型号 | 系统版本    | 运/储存配置 | soC型号            | 是否可以安装第三方APP | 是否可以进行Root                | 备注                                                                                        | TWRP                   |
+| ---------- | ----------- | ----------- | ------------------ | --------------------- | ------------------------------- | ------------------------------------------------------------------------------------------- | ---------------------- |
+| T10        | Android 9.0 | 8+256       | （展讯）ud710_2h10 | Y                     | Y                               |                                                                                             | 已成功编译，但刷不进去 |
+| X2Pro      | Android 9.0 | 4+128       | （展讯）ud710_2h10 | Y                     | Y                               |                                                                                             | 没设备树               |
+| X3Pro      | Android 9.0 | 8+256       | （展讯）ud710_2h10 | Y                     | ？                              | 操作人员刷了C6的系统，后面就没进展了                                                        |                        |
+| T20        | Android 9.0 | 8+256       | （展讯）ud710_2h10 | ？                    | N                               | 卡在进download，操作人员的机器没有反应                                                      |                        |
+| X1Pro      | Android 9.0 | ？          | 高通芯片           | Y                     | Y                               | Root教程在[X1 PRO - 研究导航 - 小白向supersuroot.github.io](https://supersuroot.github.io/)    |                        |
+| C6         | Android 9.0 | ？          | （展讯）ud710_2h10 | Y（毕业后官刷）       | N（有多人测试后反应不行）       | 校园版请毕业后再折腾                                                                        |                        |
+| T20Pro     | Android 12L | 8+256       | （瑞芯微）RK3588   | Y                     | ？（可以使用自带root的DSU镜像） | 目前仅可以使用DSU进行提取且无法进行BL解锁（被隐藏了），我们正在试图用另一种方式实现这个功能 | 已成功编译，但刷不进去 |
+| X3-5G      | Android 12  | ？          | 高通 骁龙778G      | Y                     | N                               | 泄露文档中说这个是拿Lenovo TB-J607Z改的                                                     |                        |
