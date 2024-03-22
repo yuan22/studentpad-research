@@ -335,3 +335,5 @@ spd_dump fdl fdl1.bin 0x5500 fdl fdl2.bin 0x9efffe00 exec `read_part system 0 10
 | C6         | Android 9.0 | ？          | （展讯）ud710_2h10 | Y（毕业后官刷）       | N（有多人测试后反应不行）       | 校园版请毕业后再折腾                                                                        |                        |
 | T20Pro     | Android 12L | 8+256       | （瑞芯微）RK3588   | Y                     | ？（可以使用自带root的DSU镜像） | 目前仅可以使用DSU进行提取且无法进行BL解锁（被隐藏了），我们正在试图用另一种方式实现这个功能 | 已成功编译，但刷不进去 |
 | X3-5G      | Android 12  | ？          | 高通 骁龙778G      | Y                     | N                               | 泄露文档中说这个是拿Lenovo TB-J607Z改的                                                     |                        |
+
+交流群组：点击链接加入群聊【IFLYTEK-BOOM】：https://qm.qq.com/q/x0rW2tPXVe
