@@ -86,6 +86,8 @@ adb shell pm uninstall -k --user 0 com.iflytek.study.ota
 
 ## 2024.3.8更新：高阶教程中关于开启adb部分与root系统部分合并完成
 
+## 2024.3.23————添加贡献者名单+机型配置和玩机情况表
+
 ---
 
 # AI学习机高阶教程（Experimental | 未完工警告）
@@ -97,9 +99,9 @@ adb shell pm uninstall -k --user 0 com.iflytek.study.ota
 
 所以，下面的内容请三思而行
 
-## 获取学习机的root（即刷入Magisk）
+## 获取学习机(展讯系机型)的root（即刷入Magisk）
 
-为何要把root部分拿出来讲呢？因为这学习机的boot无法patch（原因是没有ramdisk）
+为何要把root部分拿出来讲呢？因为展讯芯片系学习机的boot无法patch（原因是没有ramdisk）
 
 system分区植入法目前已成功实践，rec法因为avb的原因无法正常启动，所以下文只讲system分区植入magisk法
 
@@ -262,6 +264,8 @@ adb install <你爱玩机的apk文件>
 ![2](image/README/2.png)
 ![3](image/README/3.png)
 
+## T20Pro
+[激活双系统（即dsu）教程](https://github.com/KDXF-BOOM/studentpad-research/blob/main/t20p.md)
 ## 附录：一些资源及其使用方法/作用
 
 #### SPD_Driver
@@ -337,3 +341,18 @@ spd_dump fdl fdl1.bin 0x5500 fdl fdl2.bin 0x9efffe00 exec `read_part system 0 10
 | X3-5G      | Android 12  | ？          | 高通 骁龙778G      | Y                     | N                               | 泄露文档中说这个是拿Lenovo TB-J607Z改的                                                     |                        |
 
 交流群组：点击链接加入群聊【IFLYTEK-BOOM】：https://qm.qq.com/q/x0rW2tPXVe
+
+## Contributors | 贡献者名单
+[@KawaiiSparkle](https://github.com/KawaiiSparkle)/[@qwqlemon2333](https://github.com/qwqlemon2333)一起编写了伪造更新包教程+Root教程
+[@Tomking062](https://github.com/Tomking062)提供了Root的思路
+[@whhh233](https://github.com/whhh233)为我们免费提供了网盘来存放文件
+[@]
+[@WalleoAndrew](https://github.com/WalleoAndrew)最初开始搞科大AI学习机解除安装限制的人
+[@YedLeo1](https://github.com/YedLeo1)正在研究T20Pro解锁BL
+[@LYao2514](https://github.com/LYao2514)正在创作一键自动patch系统分区的脚本
+
+## 常见Q&A
+Q1：如何进入榜单？
+A1：你得做足够大的贡献才行
+Q2：我还是不会破解怎么办
+A2：请确保你先学会**spd_dump程序命令，Linux系统基础命令（包括nano,mount,sudo,包管理器,cp,chmod,chown,chcon的命令），计算机基础知识，搜索引擎的使用**再试试，实在不行你把这页内容扔给chatGPT，然后问它也行（
