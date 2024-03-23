@@ -343,13 +343,12 @@ spd_dump fdl fdl1.bin 0x5500 fdl fdl2.bin 0x9efffe00 exec `read_part system 0 10
 交流群组：点击链接加入群聊【IFLYTEK-BOOM】：https://qm.qq.com/q/x0rW2tPXVe
 
 ## Contributors | 贡献者名单
-[@KawaiiSparkle](https://github.com/KawaiiSparkle)/[@qwqlemon2333](https://github.com/qwqlemon2333)一起编写了伪造更新包教程+Root教程
-[@Tomking062](https://github.com/Tomking062)提供了Root的思路
-[@whhh233](https://github.com/whhh233)为我们免费提供了网盘来存放文件
-[@]
-[@WalleoAndrew](https://github.com/WalleoAndrew)最初开始搞科大AI学习机解除安装限制的人
-[@YedLeo1](https://github.com/YedLeo1)正在研究T20Pro解锁BL
-[@LYao2514](https://github.com/LYao2514)正在创作一键自动patch系统分区的脚本
+[@KawaiiSparkle](https://github.com/KawaiiSparkle)/[@qwqlemon2333](https://github.com/qwqlemon2333)一起编写了伪造更新包教程+Root教程<br>
+[@Tomking062](https://github.com/Tomking062)提供了Root的思路<br>
+[@whhh233](https://github.com/whhh233)为我们免费提供了网盘来存放文件<br>
+[@WalleoAndrew](https://github.com/WalleoAndrew)最初开始搞科大AI学习机解除安装限制的人<br>
+[@YedLeo1](https://github.com/YedLeo1)正在研究T20Pro解锁BL<br>
+[@LYao2514](https://github.com/LYao2514)正在创作一键自动patch系统分区的脚本<br>
 
 ## 常见Q&A
 Q1：如何进入榜单？
