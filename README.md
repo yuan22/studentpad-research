@@ -351,7 +351,7 @@ spd_dump fdl fdl1.bin 0x5500 fdl fdl2.bin 0x9efffe00 exec `read_part system 0 10
 [@LYao2514](https://github.com/LYao2514)正在创作一键自动patch系统分区的脚本<br>
 
 ## 常见Q&A
-Q1：如何进入榜单？
-A1：你得做足够大的贡献才行
-Q2：我还是不会破解怎么办
-A2：请确保你先学会**spd_dump程序命令，Linux系统基础命令（包括nano,mount,sudo,包管理器,cp,chmod,chown,chcon的命令），计算机基础知识，搜索引擎的使用**再试试，实在不行你把这页内容扔给chatGPT，然后问它也行（
+Q1：如何进入榜单？<br>
+A1：你得做足够大的贡献才行<br>
+Q2：我还是不会破解怎么办<br>
+A2：请确保你先学会**spd_dump程序命令，Linux系统基础命令（包括nano,mount,sudo,包管理器,cp,chmod,chown,chcon的命令），计算机基础知识，搜索引擎的使用**再试试，实在不行你把这页内容扔给chatGPT，然后问它也行（<br>
