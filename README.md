@@ -129,13 +129,15 @@ os.system("reboot bootloader")
 #### 生成解锁密钥方式2(纯电脑方式)
 * 参考的是[[Tutorial] How to unlock Unisoc (SPD) bootloader using Identifier Token](https://www.hovatek.com/forum/thread-32287.html)
 * 在下载下来的文件的解压目录的地址栏输入cmd，在打开的窗口中输入`fastboot oem get_identifier_token`,能得到一串东西，例如：
-  ```
+
+```
 Identifier token:
 XXXXXXXXXXXXXXXXXXXXXXXX
 XXXXXXX
 OKAY [  0.019s]
 finished. total time: 0.019s
-  ```
+```
+
 * 将 在`Identifier token:`后`OKAY`前 的那两行数字合在一起，
 
 #### 正式解锁
