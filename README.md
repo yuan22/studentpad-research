@@ -306,6 +306,7 @@ adb install <你爱玩机的apk文件>
 
 ### 全机型通用教程
 
+[获取OTA全量包](https://github.com/KDXF-BOOM/studentpad-research/blob/main/guide_OTA_full_Get.md)——By[@KawaiiSparkle](https://github.com/KawaiiSparkle)
 
 ## 附录：一些资源及其使用方法/作用
 
