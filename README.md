@@ -124,7 +124,21 @@ import os
 os.system("reboot bootloader")
 ```
 
-* 在下载下来的文件的解压目录的地址栏输入cmd，在打开的窗口中输入 `fastboot devices `得到一串字母加数字，这就是你机器的序列号，在另一台安卓设备上安装“文件”中的[apk](https://www.alipan.com/s/SLgfA1dFGrt)，输入你得到的序列号，完事会生成一个叫signature.bin的文件，你需要将这个文件拷到当前目录(即：你cmd在的目录)
+#### 生成解锁密钥方式1（有另一台安卓设备的情况下）
+* 在下载下来的文件的解压目录的地址栏输入cmd，在打开的窗口中输入 `fastboot devices `得到一串字母加数字，这就是你机器的序列号，在另一台安卓设备上安装“文件”中的[apk](https://www.alipan.com/s/SLgfA1dFGrt)，输入你得到的序列号（或平板背面贴纸上的SN码），完事会生成一个叫signature.bin的文件，你需要将这个文件拷到当前目录(即：你cmd在的目录)
+#### 生成解锁密钥方式2(纯电脑方式)
+* 参考的是[[Tutorial] How to unlock Unisoc (SPD) bootloader using Identifier Token](https://www.hovatek.com/forum/thread-32287.html)
+* 在下载下来的文件的解压目录的地址栏输入cmd，在打开的窗口中输入`fastboot oem get_identifier_token`,能得到一串东西，例如：
+  ```
+Identifier token:
+XXXXXXXXXXXXXXXXXXXXXXXX
+XXXXXXX
+OKAY [  0.019s]
+finished. total time: 0.019s
+  ```
+* 将 在`Identifier token:`后`OKAY`前 的那两行数字合在一起，
+
+#### 正式解锁
 * 使用 `fastboot flashing unlock_bootloader signature.bin`的命令，进行设备解锁，然后按下音量下键，确认解锁即可，然后bootloader会进行格机
 * 恭喜你，成功解锁bootloader
 
