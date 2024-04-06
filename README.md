@@ -125,22 +125,36 @@ os.system("reboot bootloader")
 ```
 
 #### 生成解锁密钥方式1（有另一台安卓设备的情况下）
+
 * 在下载下来的文件的解压目录的地址栏输入cmd，在打开的窗口中输入 `fastboot devices `得到一串字母加数字，这就是你机器的序列号，在另一台安卓设备上安装“文件”中的[apk](https://www.alipan.com/s/SLgfA1dFGrt)，输入你得到的序列号（或平板背面贴纸上的SN码），完事会生成一个叫signature.bin的文件，你需要将这个文件拷到当前目录(即：你cmd在的目录)
+
 #### 生成解锁密钥方式2(纯电脑方式)
-* 参考的是[[Tutorial] How to unlock Unisoc (SPD) bootloader using Identifier Token](https://www.hovatek.com/forum/thread-32287.html)
-* 在下载下来的文件的解压目录的地址栏输入cmd，在打开的窗口中输入`fastboot oem get_identifier_token`,能得到一串东西，例如：
+
+* 步骤1.安装环境，在powershell/Windows Terminal（管理员）中输入以下链接中的命令
+
+[自动转换Windows版本至专业工作站版,准备WSL相关Windows功能,安装WSL(Ubuntu)相关命令 · Issue #4 · KDXF-BOOM/studentpad-research (github.com)](https://github.com/KDXF-BOOM/studentpad-research/issues/4)
+
+* 步骤2.在下载下来的文件的解压目录的地址栏输入cmd，在打开的窗口中输入 `fastboot oem get_identifier_token` 命令获取 android 设备ID
+
+输出结果类似于这样：
 
 ```
 Identifier token:
 XXXXXXXXXXXXXXXXXXXXXXXX
-XXXXXXX
 OKAY [  0.019s]
 finished. total time: 0.019s
 ```
 
-* 将 在`Identifier token:`后`OKAY`前 的那两行数字合在一起，
+* 将步骤 2 所获取的设备ID作为参数，在wsl中执行设备号签名脚本，命令如下：
+
+  ```
+  ./signidentifier.sh  <填入设备ID，若为多行，请将其连成一行， 并且中间不能出现空格字符> rsa4096_vbmeta.pem signature.bin
+  ```
+
+取生成的signature.bin文件，这就是你需要的解锁文件
 
 #### 正式解锁
+
 * 使用 `fastboot flashing unlock_bootloader signature.bin`的命令，进行设备解锁，然后按下音量下键，确认解锁即可，然后bootloader会进行格机
 * 恭喜你，成功解锁bootloader
 
@@ -280,8 +294,19 @@ adb install <你爱玩机的apk文件>
 ![2](image/README/2.png)
 ![3](image/README/3.png)
 
-## T20Pro
-[激活双系统（即dsu）教程](https://github.com/KDXF-BOOM/studentpad-research/blob/main/t20p.md)
+## 衍生教程
+
+### T20Pro
+
+[激活双系统（即dsu）教程](https://github.com/KDXF-BOOM/studentpad-research/blob/main/t20p.md) ——By[@YedLeo1](https://github.com/YedLeo1)
+
+### C10(Pro)
+
+[Yixiyixi666/KDXF-studypad-C10 (github.com)](https://github.com/Yixiyixi666/KDXF-studypad-C10) ——By[@Yixiyixi666](https://github.com/Yixiyixi666)
+
+### 全机型通用教程
+
+
 ## 附录：一些资源及其使用方法/作用
 
 #### SPD_Driver
@@ -316,7 +341,8 @@ spd_dump fdl fdl1.bin 0x5500 fdl fdl2.bin 0x9efffe00 exec
 
 读取分区表：`partition_list partition.xml`
 
-读分区：`read_part <分区名> 0 <分区大小，或直接填0xFFFFFFFFFFF> <保存的文件名称>`
+读分区：`read_part <分区名> 0 <分区大小，或直接填0xFFFFFFFFFFF> <保存的文件名称> `
+或者 `read_parts partition.xml`批量读取分区
 
 写分区：`write_part <分区名> <要刷入的镜像>`
 
@@ -353,21 +379,24 @@ spd_dump fdl fdl1.bin 0x5500 fdl fdl2.bin 0x9efffe00 exec `read_part system 0 10
 | T20        | Android 9.0 | 8+256       | （展讯）ud710_2h10 | ？                    | N                               | 卡在进download，操作人员的机器没有反应                                                      |                        |
 | X1Pro      | Android 9.0 | ？          | 高通芯片           | Y                     | Y                               | Root教程在[X1 PRO - 研究导航 - 小白向supersuroot.github.io](https://supersuroot.github.io/)    |                        |
 | C6         | Android 9.0 | ？          | （展讯）ud710_2h10 | Y（毕业后官刷）       | N（有多人测试后反应不行）       | 校园版请毕业后再折腾                                                                        |                        |
-| T20Pro     | Android 12L | 8+256       | （瑞芯微）RK3588   | Y                     | ？（可以使用自带root的DSU镜像） | 目前仅可以使用DSU进行提取且无法进行BL解锁（被隐藏了），我们正在试图用另一种方式实现这个功能 | 已成功编译，但刷不进去 |
+| T20Pro     | Android 12L | 8+512       | （瑞芯微）RK3588   | Y                     | ？（可以使用自带root的DSU镜像） | 目前仅可以使用DSU进行提取且无法进行BL解锁（被隐藏了），我们正在试图用另一种方式实现这个功能 | 已成功编译，但刷不进去 |
 | X3-5G      | Android 12  | ？          | 高通 骁龙778G      | Y                     | N                               | 泄露文档中说这个是拿Lenovo TB-J607Z改的                                                     |                        |
 
 交流群组：点击链接加入群聊【IFLYTEK-BOOM】：https://qm.qq.com/q/x0rW2tPXVe
 
 ## Contributors | 贡献者名单
-[@KawaiiSparkle](https://github.com/KawaiiSparkle)/[@qwqlemon2333](https://github.com/qwqlemon2333)一起编写了伪造更新包教程+Root教程<br>
-[@Tomking062](https://github.com/Tomking062)提供了Root的思路<br>
-[@whhh233](https://github.com/whhh233)为我们免费提供了网盘来存放文件<br>
-[@WalleoAndrew](https://github.com/WalleoAndrew)最初开始搞科大AI学习机解除安装限制的人<br>
-[@YedLeo1](https://github.com/YedLeo1)正在研究T20Pro解锁BL<br>
-[@LYao2514](https://github.com/LYao2514)正在创作一键自动patch系统分区的脚本<br>
+
+[@KawaiiSparkle](https://github.com/KawaiiSparkle)/[@qwqlemon2333](https://github.com/qwqlemon2333)一起编写了伪造apk更新包教程+Root教程； `<br>`
+[@Tomking062](https://github.com/Tomking062)提供了Root的思路 `<br>`
+[@whhh233](https://github.com/whhh233)为我们免费提供了网盘来存放文件 `<br>`
+[@WalleoAndrew](https://github.com/WalleoAndrew)最初开始搞科大AI学习机解除安装限制的人 `<br>`
+[@YedLeo1](https://github.com/YedLeo1)正在研究T20Pro解锁BL，他编写了T20Pro的DSU食用方法，在[本项目下的t20p.md中](https://github.com/KDXF-BOOM/studentpad-research/blob/main/t20p.md) `<br>`
+[@LYao2514](https://github.com/LYao2514)正在创作一键自动patch系统分区的脚本 `<br>`
+[@MC220C](https://github.com/MC220C)教了我一种新的高效率提取分区方法 `<br>`
 
 ## 常见Q&A
-Q1：如何进入榜单？<br>
-A1：你得做足够大的贡献才行<br>
-Q2：我还是不会破解怎么办<br>
-A2：请确保你先学会**spd_dump程序命令，Linux系统基础命令（包括nano,mount,sudo,包管理器,cp,chmod,chown,chcon的命令），计算机基础知识，搜索引擎的使用**再试试，实在不行你把这页内容扔给chatGPT，然后问它也行（<br>
+
+Q1：如何进入榜单？`<br>`
+A1：你得做足够大的贡献才行 `<br>`
+Q2：我还是不会破解怎么办 `<br>`
+A2：请确保你先学会**spd_dump程序命令，Linux系统基础命令（包括nano,mount,sudo,包管理器,cp,chmod,chown,chcon的命令），计算机基础知识，搜索引擎的使用**再试试，实在不行你把这页内容扔给chatGPT，然后问它也行（`<br>`
