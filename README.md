@@ -387,17 +387,18 @@ spd_dump fdl fdl1.bin 0x5500 fdl fdl2.bin 0x9efffe00 exec `read_part system 0 10
 
 ## Contributors | 贡献者名单
 
-[@KawaiiSparkle](https://github.com/KawaiiSparkle)/[@qwqlemon2333](https://github.com/qwqlemon2333)一起编写了伪造apk更新包教程+Root教程； `<br>`
-[@Tomking062](https://github.com/Tomking062)提供了Root的思路 `<br>`
-[@whhh233](https://github.com/whhh233)为我们免费提供了网盘来存放文件 `<br>`
-[@WalleoAndrew](https://github.com/WalleoAndrew)最初开始搞科大AI学习机解除安装限制的人 `<br>`
-[@YedLeo1](https://github.com/YedLeo1)正在研究T20Pro解锁BL，他编写了T20Pro的DSU食用方法，在[本项目下的t20p.md中](https://github.com/KDXF-BOOM/studentpad-research/blob/main/t20p.md) `<br>`
-[@LYao2514](https://github.com/LYao2514)正在创作一键自动patch系统分区的脚本 `<br>`
-[@MC220C](https://github.com/MC220C)教了我一种新的高效率提取分区方法 `<br>`
+[@KawaiiSparkle](https://github.com/KawaiiSparkle)/[@qwqlemon2333](https://github.com/qwqlemon2333)一起编写了伪造apk更新包教程+Root教程； <br>
+[@Tomking062](https://github.com/Tomking062)提供了Root的思路 <br>
+[@whhh233](https://github.com/whhh233)为我们免费提供了网盘来存放文件 <br>
+[@WalleoAndrew](https://github.com/WalleoAndrew)最初开始搞科大AI学习机解除安装限制的人 <br>
+[@YedLeo1](https://github.com/YedLeo1)正在研究T20Pro解锁BL，他编写了T20Pro的DSU食用方法，在[本项目下的t20p.md中](https://github.com/KDXF-BOOM/studentpad-research/blob/main/t20p.md) <br>
+[@LYao2514](https://github.com/LYao2514)正在创作一键自动patch系统分区的脚本 <br>
+[@MC220C](https://github.com/MC220C)教了我一种新的高效率提取分区方法 <br>
+
 
 ## 常见Q&A
 
-Q1：如何进入榜单？`<br>`
-A1：你得做足够大的贡献才行 `<br>`
-Q2：我还是不会破解怎么办 `<br>`
-A2：请确保你先学会**spd_dump程序命令，Linux系统基础命令（包括nano,mount,sudo,包管理器,cp,chmod,chown,chcon的命令），计算机基础知识，搜索引擎的使用**再试试，实在不行你把这页内容扔给chatGPT，然后问它也行（`<br>`
+Q1：如何进入榜单？<br>
+A1：你得做足够大的贡献才行 <br>
+Q2：我还是不会破解怎么办 <br>
+A2：请确保你先学会**spd_dump程序命令，Linux系统基础命令（包括nano,mount,sudo,包管理器,cp,chmod,chown,chcon的命令），计算机基础知识，搜索引擎的使用**再试试，实在不行你把这页内容扔给chatGPT，然后问它也行（<br>
