@@ -14,7 +14,7 @@
 
 * （展讯机型）如果你的机型支持spd_dump（即fdl fdl1.bin时未出错），你可以直接使用最新版的spd_dump提取cache分区（大小都为10G），具体命令请按照主教程底下的格式自行编写，然后拿7zip打开，打开ota目录，里面那个.zip就是
 * （高通机型）拿吸盘和热风枪将屏幕拿下来，然后找到主板，短接上面的一些针脚（什么boot正负之类的，参考Lenovo TB-J607Z去）并插入线进入9008，然后QPT，QFIL，启动！（剩下的我认为不用教了）
-* （瑞芯微机型）参考T20Pro那篇教程：[studentpad-research/t20p.md at main · KDXF-BOOM/studentpad-research (github.com)](https://github.com/KDXF-BOOM/studentpad-research/blob/main/t20p.md)，搞个DSU进GSI系统，然后adb root，后面的步骤与root后无异，故也不展开了
+* （瑞芯微机型）(没用装不上系统更新)参考T20Pro那篇教程：[studentpad-research/t20p.md at main · KDXF-BOOM/studentpad-research (github.com)](https://github.com/KDXF-BOOM/studentpad-research/blob/main/t20p.md)，搞个DSU进GSI系统，然后adb root，后面的步骤与root后无异，故也不展开了
 * 能连的上adb的机型（实在没辙用这个）：在重新打开系统升级前在电脑上执行 `adb logcat > logcat.txt` ，然后打开系统升级app，检查修改的版本无误后点击下载，下了大概10%后就暂停，然后电脑那边 `Ctrl+C` 就直接停止logcat了，打开那个logcat.txt，搜 `user.zip` 然后你就得到了更新包的那一整串链接，然后你就拿Xdown之类的下载器下去吧，记得将UA改为你板子在[UserAgent分析和查询 浏览器UA分析 UA查看 iP138在线工具](https://tool.ip138.com/useragent/)中得到的那个，我认为这样就差不多了
 
 ## 碎碎念
