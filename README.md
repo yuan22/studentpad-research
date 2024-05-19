@@ -294,6 +294,25 @@ adb install <你爱玩机的apk文件>
 ![2](image/README/2.png)
 ![3](image/README/3.png)
 
+## 将X3-5G等后续高通机型解bl,Root，开adb
+
+### 大纲
+
+#### 解BL+root
+
+* 装[9008驱动](https://kdxf.work/%E9%AB%98%E9%80%9A%E6%9C%BA%E5%9E%8B/x3-5G/%E9%A9%B1%E5%8A%A8)，下一个[HxD Editor](https://mh-nexus.de/downloads/HxDSetup.zip)
+* 进入9008模式(关机,然后按音量减，再插上数据线，然后就进去了)
+* 使用[firehose文件](https://kdxf.work/%E9%AB%98%E9%80%9A%E6%9C%BA%E5%9E%8B/x3-5G/firehose)和[工具箱](https://t.me/tgshaw01 "下不了？你都TM会上Github了，翻墙不会？")读取boot_a和boot_b,frp分区(记得备份！！！你砖了我不负责)
+* 利用HxD Editor对frp的镜像进行修改，方法我不是很确定（这就是为啥让你备份frp，砖了就刷回去！），可以参考[FRP 方法 · sukanka/MEIZU16S_unlock_tutorial Wiki (github.com)](https://github.com/sukanka/MEIZU16S_unlock_tutorial/wiki/FRP-%E6%96%B9%E6%B3%95)
+* 将修改后的frp通过9008刷入,然后通过rec进bootloader，并输入 `fastboot flashing unlock`解锁bl
+* 利用工具箱中功能修补两个boot并刷回去就可以了
+
+#### 开adb
+
+等那几个人搞出来twrp适配再说，到时候直接twrp一刷就行了，挺简单的（
+
+或者你仿照展讯机型教程的试试？就是稍微复杂了些
+
 ## 衍生教程
 
 ### T20Pro
@@ -372,33 +391,33 @@ spd_dump fdl fdl1.bin 0x5500 fdl fdl2.bin 0x9efffe00 exec `read_part system 0 10
 
 #### 学习机配置及目前玩机进度一览表
 
-| 学习机型号 | 系统版本    | 运/储存配置 | soC型号            | 是否可以安装第三方APP | 是否可以进行Root                | 备注                                                                                        | TWRP                   |
-| ---------- | ----------- | ----------- | ------------------ | --------------------- | ------------------------------- | ------------------------------------------------------------------------------------------- | ---------------------- |
-| T10        | Android 9.0 | 8+256       | （展讯）ud710_2h10 | Y                     | Y                               |                                                                                             | 已成功编译，但刷不进去 |
-| X2Pro      | Android 9.0 | 4+128       | （展讯）ud710_2h10 | Y                     | Y                               |                                                                                             | 没设备树               |
-| X3Pro      | Android 9.0 | 8+256       | （展讯）ud710_2h10 | Y                     | ？                              | 操作人员刷了C6的系统，后面就没进展了                                                        |                        |
-| T20        | Android 9.0 | 8+256       | （展讯）ud710_2h10 | ？                    | N                               | 卡在进download，操作人员的机器没有反应                                                      |                        |
-| X1Pro      | Android 9.0 | ？          | 高通芯片           | Y                     | Y                               | Root教程在[X1 PRO - 研究导航 - 小白向supersuroot.github.io](https://supersuroot.github.io/)    |                        |
-| C6         | Android 9.0 | ？          | （展讯）ud710_2h10 | Y（毕业后官刷）       | N（有多人测试后反应不行）       | 校园版请毕业后再折腾                                                                        |                        |
-| T20Pro     | Android 12L | 8+512       | （瑞芯微）RK3588   | Y                     | ？（可以使用自带root的DSU镜像） | 目前仅可以使用DSU进行提取且无法进行BL解锁（被隐藏了），我们正在试图用另一种方式实现这个功能 | 已成功编译，但刷不进去 |
-| X3-5G      | Android 12  | ？          | 高通 骁龙778G      | Y                     | N                               | 泄露文档中说这个是拿Lenovo TB-J607Z改的                                                     |                        |
+| 学习机型号 | 系统版本    | 运/储存配置 | soC型号            | 是否可以安装第三方APP | 是否可以进行Root                            | 备注                                                                                           | TWRP                   |
+| ---------- | ----------- | ----------- | ------------------ | --------------------- | ------------------------------------------- | ---------------------------------------------------------------------------------------------- | ---------------------- |
+| T10        | Android 9.0 | 8+256       | （展讯）ud710_2h10 | Y                     | Y                                           |                                                                                                | 已成功编译，但刷不进去 |
+| X2Pro      | Android 9.0 | 4+128       | （展讯）ud710_2h10 | Y                     | Y                                           |                                                                                                | 没设备树               |
+| X3Pro      | Android 9.0 | 8+256       | （展讯）ud710_2h10 | Y                     | ？                                          | 操作人员刷了C6的系统，后面就没进展了                                                           |                        |
+| T20        | Android 9.0 | 8+256       | （展讯）ud710_2h10 | ？                    | N                                           | 卡在进download，操作人员的机器没有反应                                                         |                        |
+| X1Pro      | Android 9.0 | ？          | 高通芯片           | Y                     | Y                                           | Root教程在[X1 PRO - 研究导航 - 小白向supersuroot.github.io](https://supersuroot.github.io/)       |                        |
+| C6         | Android 9.0 | ？          | （展讯）ud710_2h10 | Y（毕业后官刷）       | N（有多人测试后反应不行）                   | 校园版请毕业后再折腾                                                                           |                        |
+| T20Pro     | Android 12L | 8+512       | （瑞芯微）RK3588   | Y                     | ？（可以使用自带root的DSU镜像）             | 目前仅可以使用DSU进行提取且无法进行BL解锁（被隐藏了），我们正在试图用另一种方式实现这个功能    | 已成功编译，但刷不进去 |
+| X3-5G      | Android 12  | 6+256（？） | 高通 骁龙778G      | Y                     | Y（2024.5.19更新，目前已经可以了）          | 泄露文档中说这个是拿Lenovo TB-J607Z改的,后面那个一开始折腾的去刷了一个这机型的系统，便无下文了 |                        |
+| C10（Pro） | Android 9.0 | ？          | （展讯）ud710_2h10 | N（老版本可以）       | N（无法使用spd_dump，在载入fdl1阶段出问题） | 难搞                                                                                           | 难搞                   |
 
 交流群组：点击链接加入群聊【IFLYTEK-BOOM】：https://qm.qq.com/q/x0rW2tPXVe
 
 ## Contributors | 贡献者名单
 
-[@KawaiiSparkle](https://github.com/KawaiiSparkle)/[@qwqlemon2333](https://github.com/qwqlemon2333)一起编写了伪造apk更新包教程+Root教程； <br>
-[@Tomking062](https://github.com/Tomking062)提供了Root的思路 <br>
-[@whhh233](https://github.com/whhh233)为我们免费提供了网盘来存放文件 <br>
-[@WalleoAndrew](https://github.com/WalleoAndrew)最初开始搞科大AI学习机解除安装限制的人 <br>
-[@YedLeo1](https://github.com/YedLeo1)正在研究T20Pro解锁BL，他编写了T20Pro的DSU食用方法，在[本项目下的t20p.md中](https://github.com/KDXF-BOOM/studentpad-research/blob/main/t20p.md) <br>
-[@LYao2514](https://github.com/LYao2514)正在创作一键自动patch系统分区的脚本 <br>
-[@MC220C](https://github.com/MC220C)教了我一种新的高效率提取分区方法 <br>
-
+[@KawaiiSparkle](https://github.com/KawaiiSparkle)/[@qwqlemon2333](https://github.com/qwqlemon2333)一起编写了伪造apk更新包教程+Root教程；
+[@Tomking062](https://github.com/Tomking062)提供了Root的思路、spd_dump工具（改进版本）
+[@whhh233](https://github.com/whhh233)为我们免费提供了网盘来存放文件
+[@WalleoAndrew](https://github.com/WalleoAndrew)最初开始搞科大AI学习机解除安装限制的人
+[@YedLeo1](https://github.com/YedLeo1)正在研究T20Pro解锁BL，他编写了T20Pro的DSU食用方法，在[本项目下的t20p.md中](https://github.com/KDXF-BOOM/studentpad-research/blob/main/t20p.md)
+[@LYao2514](https://github.com/LYao2514)正在创作一键自动patch系统分区的脚本
+[@MC220C](https://github.com/MC220C) 正在为C10的破解努力
 
 ## 常见Q&A
 
-Q1：如何进入榜单？<br>
-A1：你得做足够大的贡献才行 <br>
-Q2：我还是不会破解怎么办 <br>
-A2：请确保你先学会**spd_dump程序命令，Linux系统基础命令（包括nano,mount,sudo,包管理器,cp,chmod,chown,chcon的命令），计算机基础知识，搜索引擎的使用**再试试，实在不行你把这页内容扔给chatGPT，然后问它也行（<br>
+Q1：如何进入榜单？
+A1：你得做足够大的贡献才行
+Q2：我还是不会破解怎么办
+A2：请确保你先学会**spd_dump程序命令，Linux系统基础命令（包括nano,mount,sudo,包管理器,cp,chmod,chown,chcon的命令），计算机基础知识，搜索引擎的使用**再试试，实在不行你把这页内容扔给chatGPT，然后问它也行（
