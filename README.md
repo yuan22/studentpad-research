@@ -130,10 +130,7 @@ os.system("reboot bootloader")
 
 #### 生成解锁密钥方式2(纯电脑方式)
 
-* 步骤1.安装环境，在powershell/Windows Terminal（管理员）中输入以下链接中的命令
-
-[自动转换Windows版本至专业工作站版,准备WSL相关Windows功能,安装WSL(Ubuntu)相关命令 · Issue #4 · KDXF-BOOM/studentpad-research (github.com)](https://github.com/KDXF-BOOM/studentpad-research/issues/4)
-
+* 步骤1.安装WSL环境(目的是为了得到Linux环境，你也可以利用VMware等虚拟机软件创建Linux环境，这里不做要求)
 * 步骤2.在下载下来的文件的解压目录的地址栏输入cmd，在打开的窗口中输入 `fastboot oem get_identifier_token` 命令获取 android 设备ID
 
 输出结果类似于这样：
@@ -148,7 +145,7 @@ finished. total time: 0.019s
 * 将步骤 2 所获取的设备ID作为参数，在wsl中执行设备号签名脚本，命令如下：
 
   ```
-  ./signidentifier.sh  <填入设备ID，若为多行，请将其连成一行， 并且中间不能出现空格字符> rsa4096_vbmeta.pem signature.bin
+  ./signidentifier.sh  <填入设备ID，若为多行，请将其连成一行，并且中间不能出现空格字符> rsa4096_vbmeta.pem signature.bin
   ```
 
 取生成的signature.bin文件，这就是你需要的解锁文件
@@ -166,21 +163,24 @@ finished. total time: 0.019s
 
 ![1708767509011](image/README/1708767509011.png)
 
-### 获取分区大小(有关下一步提取)
+### 提取分区（重要：提取完请手动将两个镜像复制一份，防止出意外状况后无法恢复至原来状态）
 
-```
-spd_dump fdl <fdl1> 0x5500 fdl <fdl2> 0x9efffe00 exec partition_list partition.xml
-```
+#### 1.获取最新版本的spd_dump刷机工具
 
-### 提取分区（重要：提取完请手动将system镜像复制一份，防止出意外状况后无法恢复至原来状态）
+* 访问[qutick102.ysepan.com](http://qutick102.ysepan.com/)，这是刷机工具的存放网盘，由[@Tomking062](https://github.com/Tomking062)管理，打开之后，会出现如下界面：
 
-其中size部分填入上一步执行后cmd反馈中system后的数字+M，如114514M
+  ![1718709531373](image/README/1718709531373.png)
+* 你应该去下载最上面的**紫光驱动**以及最新版本的**spd_dump_dev**，你或许要问：那哪个是最新版本呢？很简单，找那个**后面跟着的日期最近的**就是，点一下文件名就能下载，另外要说明，你不应当**先安装紫光驱动**，这个驱动应当在你先把**bl正确解了以后**再安装(fastboot的驱动跟这个貌似有点冲突，会获取不到USB设备标识符导致识别不了)。
+* 将紫光驱动解压，然后到**Driver_R4.21.3201\Doc**目录下，下面有一个安装教程，名为**Driver Install and Uninstall Guide V1.2 (CN).pdf**，照着这个自己安装驱动即可
+* 将spd_dump_dev_日期.zip解压，将它里面的SPRD目录单独取出，放在一个你记得住的位置(for example:桌面)，其他的你删了都行。
+* 打开那个留下来的SPRD目录，对空白处进行**Shift+右键** ，点击"在此处打开命令窗口"，输入**spd_dump_interactive.exe**并回车，你就进入了交互界面，这时你需要将平板关机，利用上面**进入download**的相关内容进入download模式
+* 这时，你命令行应该是一个交互界面，显示**BROM>** 字样，这便代表着你成功进入download模式
+* 如果你是T10/X2P/X3P/C6等古早机型，你可以从本教程目录下的**fdls.7z** 中获取两个fdl文件用来进入fdl2交互界面，你需要把两个fdl文件放在SPRD目录下，然后在命令行里执行**fdl fdl1.bin 0x5500 （回车） fdl fdl2.bin 0x9efffe00 (回车) exec**以进入fdl2命令行模式；如果是新机型（以C10，S30，T20之类新展讯机型为代表的），你需要使用本教程目录下的**fdls-v510.zip**中获取两个fdl文件用来进入fdl2交互界面，你需要把两个fdl文件放在SPRD目录下，然后在命令行里执行**fdl fdl1.bin 0x28007000（回车） fdl fdl2.bin 0x9efffe00 (回车) exec**以进入fdl2命令行模式
+* 此时，如果能正常运行上面的命令，便会自动显示分区表，告知你各分区大小，方便你后面的提取
+* 输入**read_part 分区名 0 分区大小 保存的文件名** 以读取**vendor,system**分区，速度还是比较快的，6-8MB/s
+* 提取完进入下一步：修改system，vendor分区以root
 
-```
-spd_dump fdl <fdl1> 0x5500 fdl <fdl2> 0x9efffe00 exec read_part system 0 <size> system.img read_part vendor 0 <size> vendor.img
-```
-
-### 修改system(system-root文件下的内容在system-root.zip)
+### 修改system
 
 ```
 mkdir system
@@ -199,7 +199,7 @@ cd ..
 sudo cp -r system-root/data-magisk system/data/adb/
 ```
 
-### 修改bootanim.rc（必做）：
+#### 修改bootanim.rc（必做）：
 
 ```
 sudo nano system/system/etc/init/bootanim.rc
@@ -234,16 +234,23 @@ on property:init.svc.zygote=stopped
     exec u:r:su:s0 root root -- /sbin/magisk --auto-selinux --zygote-restart
 ```
 
-在修改完后，你需要用Ctrl+X+Y的组合键来保存你的修改，然后就完成了
+在修改完后，你需要用Ctrl+X+Y的组合键来保存你的修改,然后进行下一步
 
-### （可选但非常推荐的步骤）：1.卸载系统更新
+```
+sudo gzip system/system/etc/init/bootanim.rc bootanim.rc.gz
+sudo cp bootanim.rc.gz system/system/etc/init/bootanim.rc.gz
+```
+
+自此完成安装基本root环境
+
+#### （可选但非常推荐的步骤）：1.卸载系统更新
 
 ```
 cd system/system/app/
 sudo rm -rf IFlyOTA
 ```
 
-### （可选但非常推荐的步骤）：2.开启adb
+#### （可选但非常推荐的步骤）：2.开启adb
 
 Tips：如果你前一步"卸载系统更新"也进行了，那你需要先执行三次 `cd ..`
 
@@ -259,19 +266,42 @@ persist.sys.usb.config=diag,adb,mtp
 ro.sys.usb.default.config=diag,adb,mtp
 ```
 
-在修改完后，你需要用Ctrl+X+Y的组合键来保存你的修改，然后就完成了
+在修改完后，你需要用Ctrl+X+Y的组合键来保存你的修改，然后就完成了改system的步骤
 
-### 取消挂载system.img：
+#### 修改vendor分区
+
+```
+wget https://github.com/topjohnwu/Magisk/releases/download/v27.0/Magisk-v27.0.apk
+unzip Magisk-v27.0.apk -d Magisk
+cp Magisk/lib/x86_64/libmagiskinit.so ./magiskinit
+chmod +x magiskinit
+rm -rf Magisk
+sudo cp vendor/etc/selinux/precompiled_sepolicy precompiled_sepolicy
+gzip precompiled_sepolicy
+cp precompiled_sepolicy.gz sepol.in
+./magiskinit --patch-sepol sepol.in sepol.out
+sudo rm precompiled_sepolicy.gz
+sudo cp sepol.out vendor/etc/selinux/precompiled_sepolicy
+sudo cp precompiled_sepolicy.gz vendor/etc/selinux/precompiled_sepolicy.gz
+```
+
+#### 取消挂载修改过的分区：
 
 ```
 sudo umount system.img
-```
-
-### 刷入system：
+sudo umount vendor.img
 
 ```
-spd_dump fdl <fdl1> 0x5500 fdl <fdl2> 0x9efffe00 exec write_part system system.img reset
+
+#### 刷入system，vendor（spd_dump窗口下
+
 ```
+write_part system system.img
+write_part vendor vendor.img
+reset
+```
+
+注：reset命令是重启的意思，如果你还要刷其他分区，你刷完再执行reset
 
 ### 开机后步骤
 
@@ -303,7 +333,7 @@ adb install <你爱玩机的apk文件>
 * 装[9008驱动](https://kdxf.work/%E9%AB%98%E9%80%9A%E6%9C%BA%E5%9E%8B/x3-5G/%E9%A9%B1%E5%8A%A8)，下一个[HxD Editor](https://mh-nexus.de/downloads/HxDSetup.zip)
 * 进入9008模式(关机,然后按音量减，再插上数据线，然后就进去了)
 * 使用[firehose文件](https://kdxf.work/%E9%AB%98%E9%80%9A%E6%9C%BA%E5%9E%8B/x3-5G/firehose)和[工具箱](https://t.me/tgshaw01 "下不了？你都TM会上Github了，翻墙不会？")读取boot_a和boot_b,frp分区(记得备份！！！你砖了我不负责)
-* 利用HxD Editor对frp的镜像进行修改，方法我不是很确定（这就是为啥让你备份frp，砖了就刷回去！），可以参考[FRP 方法 · sukanka/MEIZU16S_unlock_tutorial Wiki (github.com)](https://github.com/sukanka/MEIZU16S_unlock_tutorial/wiki/FRP-%E6%96%B9%E6%B3%95)
+* 利用HxD Editor对frp的镜像进行修改，将最后一个字节改为1（修改前好习惯，备份）
 * 将修改后的frp通过9008刷入,然后通过rec进bootloader，并输入 `fastboot flashing unlock`解锁bl
 * 利用工具箱中功能修补两个boot并刷回去就可以了
 
@@ -389,19 +419,19 @@ spd_dump fdl fdl1.bin 0x5500 fdl fdl2.bin 0x9efffe00 exec `read_part system 0 10
 
 ---
 
-#### 学习机配置及目前玩机进度一览表
+#### 学习机配置及目前玩机进度一览表（包括Root，TWRP，GSI）
 
-| 学习机型号 | 系统版本    | 运/储存配置 | soC型号            | 是否可以安装第三方APP | 是否可以进行Root                            | 备注                                                                                           | TWRP                   |
-| ---------- | ----------- | ----------- | ------------------ | --------------------- | ------------------------------------------- | ---------------------------------------------------------------------------------------------- | ---------------------- |
-| T10        | Android 9.0 | 8+256       | （展讯）ud710_2h10 | Y                     | Y                                           |                                                                                                | 已成功编译，但刷不进去 |
-| X2Pro      | Android 9.0 | 4+128       | （展讯）ud710_2h10 | Y                     | Y                                           |                                                                                                | 没设备树               |
-| X3Pro      | Android 9.0 | 8+256       | （展讯）ud710_2h10 | Y                     | ？                                          | 操作人员刷了C6的系统，后面就没进展了                                                           |                        |
-| T20        | Android 9.0 | 8+256       | （展讯）ud710_2h10 | ？                    | N                                           | 卡在进download，操作人员的机器没有反应                                                         |                        |
-| X1Pro      | Android 9.0 | ？          | 高通芯片           | Y                     | Y                                           | Root教程在[X1 PRO - 研究导航 - 小白向supersuroot.github.io](https://supersuroot.github.io/)       |                        |
-| C6         | Android 9.0 | ？          | （展讯）ud710_2h10 | Y（毕业后官刷）       | N（有多人测试后反应不行）                   | 校园版请毕业后再折腾                                                                           |                        |
-| T20Pro     | Android 12L | 8+512       | （瑞芯微）RK3588   | Y                     | ？（可以使用自带root的DSU镜像）             | 目前仅可以使用DSU进行提取且无法进行BL解锁（被隐藏了），我们正在试图用另一种方式实现这个功能    | 已成功编译，但刷不进去 |
-| X3-5G      | Android 12  | 6+256（？） | 高通 骁龙778G      | Y                     | Y（2024.5.19更新，目前已经可以了）          | 泄露文档中说这个是拿Lenovo TB-J607Z改的,后面那个一开始折腾的去刷了一个这机型的系统，便无下文了 |                        |
-| C10（Pro） | Android 9.0 | ？          | （展讯）ud710_2h10 | N（老版本可以）       | N（无法使用spd_dump，在载入fdl1阶段出问题） | 难搞                                                                                           | 难搞                   |
+| 学习机型号 | 系统版本    | 运/储存配置 | soC型号            | 是否可以安装第三方APP | 是否可以进行Root                                              | 备注                                                                                                                                                       | TWRP                   | GSI支持                 |
+| ---------- | ----------- | ----------- | ------------------ | --------------------- | ------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------- | ----------------------- |
+| T10        | Android 9.0 | 8+256       | （展讯）ud710_2h10 | Y                     | Y                                                             |                                                                                                                                                            | 已成功编译，但刷不进去 | 暂时还不行              |
+| X2Pro      | Android 9.0 | 4+128       | （展讯）ud710_2h10 | Y                     | Y                                                             |                                                                                                                                                            | 没设备树               | OK                      |
+| X3Pro      | Android 9.0 | 8+256       | （展讯）ud710_2h10 | Y                     | ？                                                            | 操作人员刷了C6的系统，后面就没进展了                                                                                                                       |                        | Half-OK，需要修改vendor |
+| T20        | Android 9.0 | 8+256       | （展讯）ud710_2h10 | ？                    | N                                                             | 卡在进download，操作人员的机器没有反应                                                                                                                     |                        | 未知                    |
+| X1Pro      | Android 9.0 | ？          | 高通芯片           | Y                     | Y                                                             | Root教程在[X1 PRO - 研究导航 - 小白向supersuroot.github.io](https://supersuroot.github.io/)                                                                   |                        | 未知                    |
+| C6         | Android 9.0 | ？          | （展讯）ud710_2h10 | Y（毕业后官刷）       | N（有多人测试后反应不行）                                     | 校园版请毕业后再折腾                                                                                                                                       |                        | OK                      |
+| T20Pro     | Android 12L | 8+512       | （瑞芯微）RK3588   | Y                     | ？（可以使用自带root的DSU镜像）                               | 神金，用你RK的工具根本找不到那个frp分区，uboot被删减了，avb是不存在的。我们现在只能希望有个人主动试试刷入magisked_boot来看看能不能root。总之，最抽象的一集 | 已成功编译，但刷不进去 | 未知                    |
+| X3-5G      | Android 12  | 6+256（？） | 高通 骁龙778G      | Y                     | Y（2024.5.19更新，目前已经可以了）                            | 最有乐子的一集，9008进入方式与展讯下载一模一样,是通过修改frp分区最后一个字节为1来进行允许解锁oem进而解锁bl                                                 |                        | 未知                    |
+| C10（Pro） | Android 9.0 | ？          | （展讯）ud710_2h10 | N（老版本可以）       | N（无法使用spd_dump，没人试Tomking062项目Wiki里的v510地址值） | 没人试Tomking062项目Wiki里的v510地址值                                                                                                                     |                        | 未知                    |
 
 交流群组：点击链接加入群聊【IFLYTEK-BOOM】：https://qm.qq.com/q/x0rW2tPXVe
 
