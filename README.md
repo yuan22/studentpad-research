@@ -184,7 +184,7 @@ or:
 * 输入**read_part 分区名 0 分区大小 保存的文件名** 以读取**vendor,system**分区，速度还是比较快的，6-8MB/s
 * 提取完进入下一步：修改system，vendor分区以root
 
-### 修改system
+### 修改system(本文默认你用的是WSL2 Ubuntu环境)
 
 ```
 mkdir system
