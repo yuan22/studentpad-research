@@ -31,7 +31,7 @@ system分区植入法目前已成功实践，rec法因为avb的原因无法正�
 * 文件：[到“紫光解BL锁”目录下下载adb-fastboot-win-unlock.zip文件](http://qutick102.ysepan.com/)
 * 文件2：[下载&#34;用来得到解锁密钥的软件.apk&#34;](https://kdxf.work/)
 * 进入fastboot模式(有两种方法，在各机型的新版本已经修复了第2种使用编程空间的方法,如失败请使用第1种方法进入fastboot):
-* 1.使用物理按键进入REC（提示：与Jingpad A1进入rec的方式一致），然后使用电源键+音量加的按键组合调出菜单，用音量上选择第二项，然后使用电源键进入fastboot模式
+* 1.使用物理按键进入REC（提示：与Jingpad A1进入rec的方式一致，具体方式请见Jingpad A1的Postmarket OS Wiki页面），然后轻按电源键+音量加的按键组合调出菜单，用音量上选择第二项，然后使用电源键进入fastboot模式
 * 2.检查学习机内是否有编程空间软件，若没有可升级学习机系统；进入编程空间后输入以下文本并执行学习机会自动进入fastboot模式
 
 ```
@@ -272,9 +272,13 @@ adb install <你爱玩机的apk文件>
 
 [Yixiyixi666/KDXF-studypad-C10 (github.com)](https://github.com/Yixiyixi666/KDXF-studypad-C10) ——By[@Yixiyixi666](https://github.com/Yixiyixi666)
 
-### 全机型通用教程
+### 通用教程（不一定是全机型）
 
-[OTA全量包、差分包及如何利用的一系列方法](https://github.com/KDXF-BOOM/studentpad-research/blob/main/guide_OTA_full_Get.md)——By[@KawaiiSparkle](https://github.com/KawaiiSparkle)
+[OTA全量包、差分包及如何利用的一系列方法(全机型通用)](https://github.com/KDXF-BOOM/studentpad-research/blob/main/guide_OTA_full_Get.md)——By[@KawaiiSparkle](https://github.com/KawaiiSparkle)
+
+[替换内置PackageInstaller与DefaultContainerService程序(文件仅适用于安卓9，安卓11、12机型需要自行找对应版本的文件进行替换)](https://github.com/KDXF-BOOM/studentpad-research/blob/main/replace_the_original_installer.md)——By[@KawaiiSparkle](https://github.com/KawaiiSparkle)
+
+
 
 ## 附录：一些资源及其使用方法/作用
 
