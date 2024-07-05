@@ -94,9 +94,9 @@ or:
 * 将spd_dump_dev_日期.zip解压，将它里面的SPRD目录单独取出，放在一个你记得住的位置(for example:桌面)，其他的你删了都行。
 * 打开那个留下来的SPRD目录，对空白处进行**Shift+右键** ，点击"在此处打开命令窗口"，输入**spd_dump_interactive.exe**并回车，你就进入了交互界面，这时你需要将平板关机，利用上面**进入download**的相关内容进入download模式
 * 这时，你命令行应该是一个交互界面，显示**BROM>** 字样，这便代表着你成功进入download模式
-* 如果你是T10/X2P/X3P/C6/T20等机型(芯片为类型1)，你可以从本教程目录下的**fdls.7z** 中获取两个fdl文件用来进入fdl2交互界面，你需要把两个fdl文件放在SPRD目录下，然后在命令行里执行**fdl fdl1.bin 0x5500 （回车） fdl fdl2.bin 0x9efffe00 (回车) exec**以进入fdl2命令行模式；如果是新机型（以C10，S30之类新展讯机型为代表的类型2机型），自求多福，或者使用A10(也为TX20平台)的已Root全量包
+* 如果你是T10/X2P/X3P/C6/T20等机型(芯片为类型1)，你可以从本教程目录下的**fdls.7z** 中获取两个fdl文件用来进入fdl2交互界面，你需要把两个fdl文件放在SPRD目录下，然后在命令行里执行**fdl fdl1.bin 0x5500 （回车） fdl fdl2.bin 0x9efffe00 (回车) exec (回车**以进入fdl2命令行模式；如果是新机型（以C10，S30之类新展讯机型为代表的类型2机型），自求多福，或者使用A10(也为TX20平台)的已Root全量包
 * 此时，如果能正常运行上面的命令，便会自动显示分区表，告知你各分区大小，方便你后面的提取
-* 输入**read_part 分区名 0 分区大小 保存的文件名** 以读取**vendor,system**分区，速度还是比较快的，6-8MB/s
+* 输入**read_part 分区名 0 分区大小** 以读取**vendor,system**分区，速度还是比较快的，6-8MB/s
 * 提取完进入下一步：修改system，vendor分区以root
 
 ### 修改system(本文默认你已配置好WSL2 Ubuntu环境：包括不带任何错误的安装好、启动过至少一次、创建了自己的账户及密码)
@@ -191,6 +191,7 @@ ro.sys.usb.default.config=diag,adb,mtp
 #### 修改vendor分区
 
 ```
+mkdir vendor #如果镜像文件目录下已经有这个vendor文件夹就不用执行该步
 wget https://kdxf.work/d/magisk_vendor.zip
 unzip magisk_vendor.zip
 chmod +x ./libmagiskinit.so
