@@ -99,8 +99,9 @@ or:
 * 输入**read_part 分区名 0 分区大小 保存的文件名** 以读取**vendor,system**分区，速度还是比较快的，6-8MB/s
 * 提取完进入下一步：修改system，vendor分区以root
 
-### 修改system(本文默认你用的是WSL2 Ubuntu环境)
+### 修改system(本文默认你已配置好WSL2 Ubuntu环境：包括不带任何错误的安装好、启动过至少一次、创建了自己的账户及密码)
 
+你需要在镜像目录的路径栏中输入`wsl -d Ubuntu -u root`并回车即可进入Linux环境，并异步执行以下命令：
 ```
 mkdir system
 sudo mount -o rw system.img system
@@ -160,9 +161,9 @@ sudo gzip system/system/etc/init/bootanim.rc bootanim.rc.gz
 sudo cp bootanim.rc.gz system/system/etc/init/bootanim.rc.gz
 ```
 
-自此完成安装基本root环境
+自此完成安装基本root环境，下面到"修改vendor"前都是一些优化步骤
 
-#### （可选但非常推荐的步骤）：1.卸载系统更新
+#### 1.卸载系统更新(如果你不想进系统后被人误操作导致砖机的话)
 
 ```
 cd system/system/app/
@@ -190,18 +191,13 @@ ro.sys.usb.default.config=diag,adb,mtp
 #### 修改vendor分区
 
 ```
-wget https://github.com/topjohnwu/Magisk/releases/download/v27.0/Magisk-v27.0.apk
-unzip Magisk-v27.0.apk -d Magisk
-cp Magisk/lib/x86_64/libmagiskinit.so ./magiskinit
-chmod +x magiskinit
-rm -rf Magisk
-sudo cp vendor/etc/selinux/precompiled_sepolicy precompiled_sepolicy
-gzip precompiled_sepolicy
-cp precompiled_sepolicy.gz sepol.in
-./magiskinit --patch-sepol sepol.in sepol.out
-sudo rm precompiled_sepolicy.gz
+wget https://kdxf.work/d/magisk_vendor.zip
+unzip magisk_vendor.zip
+chmod +x ./libmagiskinit.so
+sudo cp vendor/etc/selinux/precompiled_sepolicy sepol.in
+./libmagiskinit.so --patch-sepol sepol.in sepol.out
 sudo cp sepol.out vendor/etc/selinux/precompiled_sepolicy
-sudo cp precompiled_sepolicy.gz vendor/etc/selinux/precompiled_sepolicy.gz
+sudo gzip -k vendor/etc/selinux/precompiled_sepolicy
 ```
 
 #### 取消挂载修改过的分区：
@@ -231,7 +227,7 @@ reset
 
 ```
 adb devices
-adb install <你爱玩机的apk文件>
+adb install 你爱玩机的apk文件
 ```
 
 工作模式选择Root，给它授权，然后你就可以使用这里面的安装器了（喜
@@ -239,7 +235,7 @@ adb install <你爱玩机的apk文件>
 #### 使用爱玩机工具箱备份全分区（救砖可以使用备份的分区
 
 步骤放图片里了，自己看吧
-![1](image/README/1.png "111")
+![1](image/README/1.png)
 ![2](image/README/2.png)
 ![3](image/README/3.png)
 
