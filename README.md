@@ -101,7 +101,14 @@ or:
 
 ### 修改system(本文默认你已配置好WSL2 Ubuntu环境：包括不带任何错误的安装好、启动过至少一次、创建了自己的账户及密码)
 
-你需要在镜像目录的路径栏中输入`wsl -d Ubuntu -u root`并回车即可进入Linux环境，并异步执行以下命令：
+**2024.7.27:现在可以选择使用[一键脚本](https://github.com/KDXF-BOOM/studentpad-research/blob/System-Image-Patch-Script/patch_root_adb.sh)进行半自动化修补，但你需要自行安装unzip软件包，但请注意，本脚本默认在root用户下运行且提示语为英文，你如果要使用需要有一定英文基础 or 会用翻译软件**
+
+**如果出现operation not premitted，你需要创建虚拟磁盘然后挂载到Linux下并移动文件到虚拟磁盘下/使用chattr命令更改文件属性**
+
+**如果出现空间不够，请自行删除system分区下app中TyeBroswer/IFlyOTA/IFlyCleanMaster/IFlyPdfReader等文件夹然后再次运行脚本**
+
+你需要在镜像目录的路径栏中输入 `wsl -d Ubuntu -u root`并回车即可进入Linux环境，并异步执行以下命令：
+
 ```
 mkdir system
 sudo mount -o rw system.img system
@@ -275,8 +282,6 @@ adb install 你爱玩机的apk文件
 
 [替换内置PackageInstaller与DefaultContainerService程序(文件仅适用于安卓9，安卓11、12机型需要自行找对应版本的文件进行替换)](https://github.com/KDXF-BOOM/studentpad-research/blob/main/replace_the_original_installer.md)——By[@KawaiiSparkle](https://github.com/KawaiiSparkle)
 
-
-
 ## 附录：一些资源及其使用方法/作用
 
 #### SPD_Driver
@@ -297,37 +302,37 @@ Spd_Dump工具下载：[到“紫光通用”目录下下载日期最新的spd_d
 
 #### 学习机配置及目前玩机进度一览表（包括Root，TWRP，GSI）
 
-| 学习机型号 | 系统版本    | 运/储存配置 | soC型号                    | 是否可以安装第三方APP | 是否可以进行Root                                              | 备注                                                                                                                                                       | TWRP                   | GSI支持                 |
-| ---------- | ----------- | ----------- | -------------------------- | --------------------- | ------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------- | ----------------------- |
-| T10        | Android 9.0 | 8+256       | 展讯T710类型1              | Y                     | Y                                                             |                                                                                                                                                            | 已成功编译，但刷不进去 | 暂时还不行              |
-| X2Pro      | Android 9.0 | 4+128       | 展讯T710类型0              | Y                     | Y                                                             |                                                                                                                                                            | 没设备树               | OK                      |
-| X3Pro      | Android 9.0 | 8+256       | 展讯T710类型0              | Y                     | ？                                                            | 操作人员刷了C6的系统，后面就没进展了                                                                                                                       |                        | Half-OK，需要修改vendor |
-| T20        | Android 9.0 | 8+256       | 展讯T710类型1              | ？                    | ?                                                             | 卡在进download，操作人员的机器没有反应                                                                                                                     |                        | 未知                    |
-| X1Pro      | Android 9.0 | 4+64        | 高通芯片                   | Y                     | Y                                                             | Root教程在[X1 PRO - 研究导航 - 小白向supersuroot.github.io](https://supersuroot.github.io/)                                                                   |                        | 未知                    |
-| C6         | Android 9.0 | 4+64        | 展讯T710类型1/0            | Y（毕业后官刷）       | N（有多人测试后反应不行）                                     | 校园版请毕业后再折腾                                                                                                                                       |                        | OK                      |
-| T20Pro     | Android 12L | 8+512       | （瑞芯微）RK3588           | Y                     | ？（可以使用自带root的DSU镜像）                               | 神金，用你RK的工具根本找不到那个frp分区，uboot被删减了，avb是不存在的。我们现在只能希望有个人主动试试刷入magisked_boot来看看能不能root。总之，最抽象的一集 | 已成功编译，但刷不进去 | 未知                    |
-| X3-5G      | Android 12  | 6+256       | 高通 骁龙750G              | Y                     | Y（2024.5.19更新，目前已经可以了）                            | 最有乐子的一集，9008进入方式与展讯下载一模一样,是通过修改frp分区最后一个字节为1来进行允许解锁oem进而解锁bl                                                 |                        | 未知                    |
-| C10（Pro） | Android 9.0 | 4+128       | 展讯T710类型2(暂时不可解) | ？（老版本可以）      | N（无法使用spd_dump,加载值未知，试图开发新方法） | 未知                                                                                                                     |                        | 未知                    |
+| 学习机型号 | 系统版本    | 运/储存配置 | soC型号                   | 是否可以安装第三方APP | 是否可以进行Root                                 | 备注                                                                                                                                                       | TWRP                   | GSI支持                 |
+| ---------- | ----------- | ----------- | ------------------------- | --------------------- | ------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------- | ----------------------- |
+| T10        | Android 9.0 | 8+256       | 展讯T710类型1             | Y                     | Y                                                |                                                                                                                                                            | 已成功编译，但刷不进去 | 暂时还不行              |
+| X2Pro      | Android 9.0 | 4+128       | 展讯T710类型0             | Y                     | Y                                                |                                                                                                                                                            | 没设备树               | OK                      |
+| X3Pro      | Android 9.0 | 8+256       | 展讯T710类型0             | Y                     | ？                                               | 操作人员刷了C6的系统，后面就没进展了                                                                                                                       |                        | Half-OK，需要修改vendor |
+| T20        | Android 9.0 | 8+256       | 展讯T710类型1             | ？                    | ?                                                | 卡在进download，操作人员的机器没有反应                                                                                                                     |                        | 未知                    |
+| X1Pro      | Android 9.0 | 4+32        | 高通450/625               | Y                     | Y                                                | Root教程在[X1 PRO - 研究导航 - 小白向supersuroot.github.io](https://supersuroot.github.io/)                                                                   |                        | 未知                    |
+| C6         | Android 9.0 | 4+64        | 展讯T710类型1/0           | Y（毕业后官刷）       | N（有多人测试后反应不行）                        | 校园版请毕业后再折腾                                                                                                                                       |                        | OK                      |
+| T20Pro     | Android 12L | 8+512       | （瑞芯微）RK3588          | Y                     | ？（可以使用自带root的DSU镜像）                  | 神金，用你RK的工具根本找不到那个frp分区，uboot被删减了，avb是不存在的。我们现在只能希望有个人主动试试刷入magisked_boot来看看能不能root。总之，最抽象的一集 | 已成功编译，但刷不进去 | 未知                    |
+| X3-5G      | Android 11  | 6+256       | 高通 骁龙750G             | Y                     | Y（2024.5.19更新，目前已经可以了）               | 最有乐子的一集，9008进入方式与展讯下载一模一样,是通过修改frp分区最后一个字节为1来进行允许解锁oem进而解锁bl                                                 |                        | 未知                    |
+| C10（Pro） | Android 9.0 | 4+128       | 展讯T710类型2(暂时不可解) | ？（老版本可以）      | N（无法使用spd_dump,加载值未知，试图开发新方法） | 未知                                                                                                                                                       |                        | 未知                    |
 
 群聊：766720774(QQ),看管理心情踢人
 
 ## Contributors | 贡献者名单
 
-[@KawaiiSparkle](https://github.com/KawaiiSparkle)/[@qwqlemon2333](https://github.com/qwqlemon2333)一起编写了伪造apk更新包教程+Root教程 
-[@KawaiiSparkle](https://github.com/KawaiiSparkle)研究了IFlyOTA，并编写了相关文档 
+[@KawaiiSparkle](https://github.com/KawaiiSparkle)/[@qwqlemon2333](https://github.com/qwqlemon2333)一起编写了伪造apk更新包教程+Root教程
+[@KawaiiSparkle](https://github.com/KawaiiSparkle)研究了IFlyOTA，并编写了相关文档
 [@Tomking062](https://github.com/Tomking062)提供了Root的思路、spd_dump工具(改进版本)
-[@whhh233](https://github.com/whhh233)为我们免费提供了网盘来存放文件 
-[@WalleoAndrew](https://github.com/WalleoAndrew)最初开始搞科大AI学习机解除安装限制的人 
-[@YedLeo1](https://github.com/YedLeo1)正在研究T20Pro解锁BL，他编写了T20Pro的DSU食用方法，在[本项目下的t20p.md中](https://github.com/KDXF-BOOM/studentpad-research/blob/main/t20p.md) 
-[@KawaiiSparkle](https://github.com/KawaiiSparkle)/[@LYao2514](https://github.com/LYao2514)创作了一键自动patch系统分区的脚本 
+[@whhh233](https://github.com/whhh233)为我们免费提供了网盘来存放文件
+[@WalleoAndrew](https://github.com/WalleoAndrew)最初开始搞科大AI学习机解除安装限制的人
+[@YedLeo1](https://github.com/YedLeo1)正在研究T20Pro解锁BL，他编写了T20Pro的DSU食用方法，在[本项目下的t20p.md中](https://github.com/KDXF-BOOM/studentpad-research/blob/main/t20p.md)
+[@KawaiiSparkle](https://github.com/KawaiiSparkle)/[@LYao2514](https://github.com/LYao2514)创作了一键自动patch系统分区的脚本
 
 ## 常见Q&A
 
-Q1:如何进入榜单？ 
-A1:你得做足够大的贡献才行 
-Q2:为什么大佬不愿意帮我? 
-A2:首先，**新手**不代表你可以**不动脑子**,我们更希望的是你能通过[菜鸟教程](https://www.runoob.com/linux/linux-tutorial.html)、[Bilibili](https://www.bilibili.com)、[Bing](https://www.bing.com/)等网址自行解决问题，至于一些英文的东西需要自行翻译 
-Q3:如何鉴别安卓版本(9 or 11/12) 
-A3:注意时间的位置(左上角 or 右上角)，在左边即为11/12；去(`设置——存储`点击"系统")，这样可以得到安卓版本号。 
-Q4:如何鉴别设备soC厂商？ 
-A4:和各机型的"下载模式"有关,这是所有的提示 
+Q1:如何进入榜单？
+A1:你得做足够大的贡献才行
+Q2:为什么大佬不愿意帮我?
+A2:首先，**新手**不代表你可以**不动脑子**,我们更希望的是你能通过[菜鸟教程](https://www.runoob.com/linux/linux-tutorial.html)、[Bilibili](https://www.bilibili.com)、[Bing](https://www.bing.com/)等网址自行解决问题，至于一些英文的东西需要自行翻译
+Q3:如何鉴别安卓版本(9 or 11/12)
+A3:注意时间的位置(左上角 or 右上角)，在左边即为11/12；去(`设置——存储`点击"系统")，这样可以得到安卓版本号。
+Q4:如何鉴别设备soC厂商？
+A4:和各机型的"下载模式"有关,这是所有的提示
