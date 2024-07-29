@@ -254,8 +254,8 @@ adb install 你爱玩机的apk文件
 #### 解BL+root
 
 * 装[9008驱动](https://kdxf.work/%E9%AB%98%E9%80%9A%E6%9C%BA%E5%9E%8B/x3-5G/%E9%A9%B1%E5%8A%A8)，下一个[HxD Editor](https://mh-nexus.de/downloads/HxDSetup.zip)
-* 进入9008模式(关机,然后按音量减，再插上数据线，然后就进去了)
-* 使用[firehose文件](https://kdxf.work/%E9%AB%98%E9%80%9A%E6%9C%BA%E5%9E%8B/x3-5G/firehose)和[工具箱](https://t.me/tgshaw01 "下不了？你都TM会上Github了，翻墙不会？")读取boot_a和boot_b,frp分区(记得备份！！！你砖了我不负责)
+* 进入9008模式(关机，按住音量加再插上数据线，然后就进去了)
+* 使用[firehose文件](https://kdxf.work/%E9%AB%98%E9%80%9A%E6%9C%BA%E5%9E%8B/x3-5G/firehose)和[工具箱](https://t.me/tgshaw01 "下不了？你都TM会上Github了，翻墙创个tg号不会？")读取boot_a和boot_b,frp分区(记得备份！！！你砖了我不负责)
 * 利用HxD Editor对frp的镜像进行修改，将最后一个字节改为1（修改前好习惯，备份）
 * 将修改后的frp通过9008刷入,然后通过rec进bootloader，并输入 `fastboot flashing unlock`解锁bl
 * 利用工具箱中功能修补两个boot并刷回去就可以了
